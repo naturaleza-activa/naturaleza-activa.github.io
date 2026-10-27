@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="Campo de Lobos al atardecer - placeholder">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6D9A0"/>
+      <stop offset="45%" stop-color="#E8B45A"/>
+      <stop offset="100%" stop-color="#C47A28"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6B8F3C"/>
+      <stop offset="55%" stop-color="#3F6B32"/>
+      <stop offset="100%" stop-color="#2A4A28"/>
+    </linearGradient>
+    <linearGradient id="haze" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FFF3D6" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#FFE6A8" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFF3D6" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <ellipse cx="1180" cy="280" rx="120" ry="120" fill="#FFE9B0" opacity="0.85"/>
+  <ellipse cx="1180" cy="280" rx="160" ry="160" fill="#FFD98A" opacity="0.25"/>
+  <path d="M0 520 C220 470 380 540 560 500 C780 450 980 540 1200 490 C1380 450 1500 500 1600 480 L1600 1000 L0 1000 Z" fill="url(#field)"/>
+  <path d="M0 620 C180 590 340 650 520 610 C740 560 960 640 1180 600 C1360 570 1480 610 1600 590 L1600 1000 L0 1000 Z" fill="#33572C" opacity="0.55"/>
+  <g fill="#F4C96A" opacity="0.55">
+    <circle cx="180" cy="700" r="4"/><circle cx="260" cy="740" r="3"/><circle cx="340" cy="690" r="5"/>
+    <circle cx="520" cy="760" r="3"/><circle cx="640" cy="710" r="4"/><circle cx="780" cy="780" r="3"/>
+    <circle cx="920" cy="720" r="5"/><circle cx="1080" cy="760" r="3"/><circle cx="1240" cy="700" r="4"/>
+    <circle cx="1380" cy="750" r="3"/><circle cx="1480" cy="710" r="4"/>
+  </g>
+  <g fill="#E8F0C8" opacity="0.35">
+    <circle cx="220" cy="780" r="3"/><circle cx="480" cy="800" r="2"/><circle cx="860" cy="820" r="3"/>
+    <circle cx="1120" cy="790" r="2"/><circle cx="1320" cy="810" r="3"/>
+  </g>
+  <rect width="1600" height="1000" fill="url(#haze)"/>
+  <text x="800" y="940" text-anchor="middle" font-family="Georgia, serif" font-size="22" fill="#F7E8C0" opacity="0.7">Placeholder - reemplazar con foto del campo / colmenas</text>
+</svg>

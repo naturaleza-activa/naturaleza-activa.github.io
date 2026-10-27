@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Naturaleza Activa — miel artesanal de Lobos, Buenos Aires. De la abeja a tu mesa, sin químicos ni conservantes.">
+  <title>Naturaleza Activa — Miel artesanal de Lobos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header" data-header>
+    <div class="site-header__inner">
+      <a class="site-header__brand" href="#inicio">Naturaleza Activa</a>
+      <nav class="site-nav" aria-label="Principal">
+        <a href="#historia">Historia</a>
+        <a href="#productos">Productos</a>
+        <a href="#envios">Envíos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="btn btn--small btn--solid" href="#productos">Comprar</a>
+    </div>
+  </header>
+
+  <main id="contenido">
+    <!-- HERO: una sola composición — marca dominante, un titular, un apoyo, un grupo CTA -->
+    <section id="inicio" class="hero" aria-labelledby="marca">
+      <div class="hero__atmosphere" aria-hidden="true">
+        <img
+          class="hero__photo"
+          src="assets/placeholders/hero.svg"
+          alt=""
+          width="1600"
+          height="1000"
+          fetchpriority="high"
+        >
+        <div class="hero__wash"></div>
+        <div class="hero__grain"></div>
+      </div>
+      <div class="hero__content">
+        <p class="hero__place">Lobos · Buenos Aires</p>
+        <h1 id="marca" class="hero__brand">Naturaleza Activa</h1>
+        <p class="hero__headline">Miel como sale de la abeja.</p>
+        <p class="hero__support">Cosecha natural del campo de Lobos: sin químicos ni conservantes, de la colmena a tu mesa.</p>
+        <div class="hero__ctas">
+          <a class="btn btn--solid" href="#productos">Ver presentaciones</a>
+          <a class="btn btn--ghost" href="#historia">Nuestra historia</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="historia" class="section story" aria-labelledby="historia-titulo">
+      <div class="section__inner story__grid">
+        <div class="story__copy reveal">
+          <p class="eyebrow">Cómo trabajamos</p>
+          <h2 id="historia-titulo">Del campo de Lobos a tu mesa</h2>
+          <p>
+            Cuidamos colmenas sanas en el campo de Lobos, rodeadas de flores silvestres, alfalfa y trigo.
+            Las abejas trabajan a su ritmo; nosotros cosechamos con respeto y sin apuros.
+          </p>
+          <p>
+            La miel llega tal como la producen: sin químicos, sin conservantes y sin tratamientos que alteren
+            su sabor ni su pureza. Un camino corto — de la abeja a tu mesa.
+          </p>
+        </div>
+        <figure class="story__media reveal">
+          <img
+            src="assets/placeholders/colmenas.svg"
+            alt="Placeholder: colmenas de Naturaleza Activa en el campo de Lobos"
+            width="900"
+            height="560"
+            loading="lazy"
+          >
+          <figcaption>Reemplazá esta imagen con una foto real de tus colmenas.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="productos" class="section products" aria-labelledby="productos-titulo">
+      <div class="section__inner">
+        <header class="section__header reveal">
+          <p class="eyebrow">Presentaciones</p>
+          <h2 id="productos-titulo">Miel para tu casa</h2>
+          <p class="section__lede">Elegí el tamaño. El pago es por Mercado Pago (el dueño pegará los links reales).</p>
+        </header>
+
+        <ul class="product-list">
+          <li class="product reveal">
+            <img
+              class="product__img"
+              src="assets/placeholders/producto-medio-kilo.svg"
+              alt="Placeholder: frasco de miel de medio kilo"
+              width="600"
+              height="600"
+              loading="lazy"
+            >
+            <div class="product__body">
+              <h3 class="product__name">½ kilo</h3>
+              <p class="product__price"><span class="product__currency">$</span>5.000 <span class="product__ars">ARS</span></p>
+              <p class="product__note">Ideal para conocer el sabor.</p>
+              <!-- OWNER: pegá el link de Mercado Pago del medio kilo abajo -->
+              <a class="btn btn--solid btn--block" href="#mp-medio-kilo" data-mp="medio-kilo">Comprar ½ kg</a>
+            </div>
+          </li>
+
+          <li class="product product--featured reveal">
+            <img
+              class="product__img"
+              src="assets/placeholders/producto-kilo.svg"
+              alt="Placeholder: frasco de miel de un kilo"
+              width="600"
+              height="600"
+              loading="lazy"
+            >
+            <div class="product__body">
+              <h3 class="product__name">1 kilo</h3>
+              <p class="product__price"><span class="product__currency">$</span>9.000 <span class="product__ars">ARS</span></p>
+              <p class="product__note">La presentación más pedida.</p>
+              <!-- OWNER: pegá el link de Mercado Pago del kilo abajo -->
+              <a class="btn btn--solid btn--block" href="#mp-kilo" data-mp="kilo">Comprar 1 kg</a>
+            </div>
+          </li>
+
+          <li class="product reveal">
+            <img
+              class="product__img"
+              src="assets/placeholders/producto-balde.svg"
+              alt="Placeholder: balde de miel de diez kilos"
+              width="600"
+              height="600"
+              loading="lazy"
+            >
+            <div class="product__body">
+              <h3 class="product__name">Balde 10 kg</h3>
+              <p class="product__price"><span class="product__currency">$</span>35.000 <span class="product__ars">ARS</span></p>
+              <p class="product__note">Para stock o uso intensivo.</p>
+              <!-- OWNER: pegá el link de Mercado Pago del balde abajo -->
+              <a class="btn btn--solid btn--block" href="#mp-balde" data-mp="balde">Comprar balde</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="envios" class="section shipping" aria-labelledby="envios-titulo">
+      <div class="section__inner shipping__panel reveal">
+        <p class="eyebrow">Envíos</p>
+        <h2 id="envios-titulo">Llegamos a todo el país</h2>
+        <p>
+          Enviamos a toda la Argentina con la opción más económica y práctica según destino.
+          Al confirmar la compra te contamos el costo exacto y el tiempo estimado.
+        </p>
+      </div>
+    </section>
+
+    <section id="contacto" class="section contact" aria-labelledby="contacto-titulo">
+      <div class="section__inner contact__inner reveal">
+        <p class="eyebrow">Contacto</p>
+        <h2 id="contacto-titulo">Escribinos</h2>
+        <p>
+          ¿Dudas sobre presentaciones o envíos? Dejanos un mail.
+          <!-- OWNER: reemplazá el href mailto y el texto cuando tengas el correo definitivo -->
+        </p>
+        <a class="contact__mail" href="mailto:contacto@naturalezaactiva.ejemplo">
+          contacto@naturalezaactiva.ejemplo
+          <span class="contact__soon">próximamente</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <p class="site-footer__brand">Naturaleza Activa</p>
+      <p class="site-footer__meta">Miel artesanal · Lobos, Buenos Aires</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

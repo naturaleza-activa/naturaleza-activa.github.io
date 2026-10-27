@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-label="Colmenas en el campo - placeholder">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#C8D9A8"/>
+      <stop offset="100%" stop-color="#E8C878"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="560" fill="url(#sky)"/>
+  <rect y="320" width="900" height="240" fill="#4A6B34"/>
+  <rect y="380" width="900" height="180" fill="#3A552A" opacity="0.7"/>
+  <g transform="translate(160,220)">
+    <rect width="140" height="40" rx="3" fill="#8B5E34"/>
+    <rect y="40" width="140" height="50" rx="3" fill="#A06E3A"/>
+    <rect y="90" width="140" height="50" rx="3" fill="#8B5E34"/>
+    <rect y="140" width="140" height="20" rx="2" fill="#6B4428"/>
+  </g>
+  <g transform="translate(380,200)">
+    <rect width="150" height="42" rx="3" fill="#9A6A38"/>
+    <rect y="42" width="150" height="52" rx="3" fill="#B07A42"/>
+    <rect y="94" width="150" height="52" rx="3" fill="#9A6A38"/>
+    <rect y="146" width="150" height="22" rx="2" fill="#734A2C"/>
+  </g>
+  <g transform="translate(610,230)">
+    <rect width="130" height="38" rx="3" fill="#855A32"/>
+    <rect y="38" width="130" height="48" rx="3" fill="#9C6A3A"/>
+    <rect y="86" width="130" height="48" rx="3" fill="#855A32"/>
+    <rect y="134" width="130" height="18" rx="2" fill="#634028"/>
+  </g>
+  <text x="450" y="520" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#F7E8C0" opacity="0.85">Placeholder - foto de colmenas en Lobos</text>
+</svg>

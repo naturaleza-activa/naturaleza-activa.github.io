@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Balde de miel 10 kg - placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E5D09A"/>
+      <stop offset="100%" stop-color="#C9A86A"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <path d="M170 200 L430 200 L400 470 Q300 510 200 470 Z" fill="#F0B84A"/>
+  <path d="M190 280 L410 280 L390 460 Q300 490 210 460 Z" fill="#C47A22" opacity="0.45"/>
+  <ellipse cx="300" cy="200" rx="130" ry="28" fill="#FFE29A"/>
+  <ellipse cx="300" cy="200" rx="110" ry="18" fill="#E8A83A" opacity="0.55"/>
+  <path d="M180 210 Q300 140 420 210" fill="none" stroke="#5C4030" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="180" cy="210" r="10" fill="#5C4030"/>
+  <circle cx="420" cy="210" r="10" fill="#5C4030"/>
+  <text x="300" y="550" text-anchor="middle" font-family="Georgia, serif" font-size="18" fill="#4A3428" opacity="0.7">Balde 10 kg - pega tu foto</text>
+</svg>

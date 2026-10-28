@@ -18,11 +18,7 @@ Los comentarios HTML encima de cada botón marcan exactamente dónde pegar.
 
 ### 2. Mail de contacto
 
-En la sección `#contacto`, reemplazá:
-
-- `href="mailto:contacto@naturalezaactiva.ejemplo"`
-- el texto visible del mail
-- quitá el span `próximamente` cuando el mail esté activo
+Ya configurado: `contactonaturalezaactiva@gmail.com` (mailto + texto visible en `#contacto`).
 
 ### 3. Fotos
 

@@ -111,7 +111,13 @@
       payBtn.hidden = true;
       payBtn.removeAttribute("data-total");
       payBtn.href = "#";
+      payBtn.removeAttribute("aria-busy");
+      payBtn.classList.remove("is-loading");
     }
+  }
+
+  function checkoutReady() {
+    return !!(cfg.MP_CHECKOUT_READY && cfg.MP_WORKER_URL);
   }
 
   function renderQuote(q) {
@@ -134,21 +140,22 @@
     payBtn.setAttribute("data-shipping", String(q.shipping));
     payBtn.setAttribute("data-total", String(q.total));
     payBtn.textContent = "Pagar " + formatArs(q.total);
+    payBtn.href = "#compra-pago";
+    payBtn.setAttribute("aria-disabled", "false");
 
-    if (cfg.MP_CHECKOUT_READY && cfg.MP_CHECKOUT_URL) {
-      payBtn.href = cfg.MP_CHECKOUT_URL;
-      payBtn.setAttribute("aria-disabled", "false");
+    if (checkoutReady()) {
       if (payNote) {
         payNote.hidden = false;
-        payNote.textContent = "Abrís Mercado Pago por el total (producto + envío).";
+        payNote.textContent =
+          "Al pagar abrís Mercado Pago Checkout Pro por el total (producto + envío).";
       }
+      var next = document.getElementById("compra-pago");
+      if (next) next.hidden = true;
     } else {
-      payBtn.href = "#compra-pago";
-      payBtn.setAttribute("aria-disabled", "false");
       if (payNote) {
         payNote.hidden = false;
         payNote.innerHTML =
-          "El total incluye envío. El link de Mercado Pago se ajustará al total cuando actives Checkout Pro. " +
+          "El total incluye envío. Checkout Pro se activa cuando el Worker esté desplegado. " +
           "Mientras tanto, escribinos a <a href=\"mailto:" +
           cfg.CONTACT_EMAIL +
           "?subject=" +
@@ -177,6 +184,59 @@
       }
     }
   }
+
+  function startCheckout(e) {
+    e.preventDefault();
+    if (!checkoutReady()) {
+      var panel = document.getElementById("compra-pago");
+      if (panel) {
+        panel.hidden = false;
+        panel.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+      }
+      return;
+    }
+
+    var productId = payBtn.getAttribute("data-product");
+    var cp = payBtn.getAttribute("data-cp");
+    var shipping = payBtn.getAttribute("data-shipping");
+    var total = payBtn.getAttribute("data-total");
+    if (!productId || !cp || !shipping || !total) {
+      setError("Recalculá el envío antes de pagar.");
+      return;
+    }
+
+    setError("");
+    /* Full-page navigation (not fetch): survives Cloudflare interstitial on workers.dev */
+    var endpoint = String(cfg.MP_WORKER_URL).replace(/\/$/, "") + "/checkout";
+    var params = new URLSearchParams({
+      productId: productId,
+      cp: cp,
+      shipping: String(shipping),
+      total: String(total)
+    });
+    payBtn.setAttribute("aria-busy", "true");
+    payBtn.textContent = "Conectando con Mercado Pago…";
+    window.location.href = endpoint + "?" + params.toString();
+  }
+
+  /* Show Worker/checkout errors returned via ?checkout_error=…#compra */
+  (function showCheckoutError() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var err = params.get("checkout_error");
+      if (!err) return;
+      setError(err);
+      var target = document.getElementById("compra");
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+      if (window.history && window.history.replaceState) {
+        params.delete("checkout_error");
+        var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + "#compra";
+        window.history.replaceState(null, "", next);
+      }
+    } catch (_) {}
+  })();
+
+
 
   function runQuote() {
     var productId = productSelect.value;
@@ -210,14 +270,6 @@
   });
 
   if (payBtn) {
-    payBtn.addEventListener("click", function (e) {
-      if (cfg.MP_CHECKOUT_READY && cfg.MP_CHECKOUT_URL) return;
-      e.preventDefault();
-      var panel = document.getElementById("compra-pago");
-      if (panel) {
-        panel.hidden = false;
-        panel.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
-      }
-    });
+    payBtn.addEventListener("click", startCheckout);
   }
 })();

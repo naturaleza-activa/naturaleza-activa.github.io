@@ -16,8 +16,8 @@ En `js/shipping-config.js`:
 |---|---|
 | `ORIGIN_CP` | Ya: `"7240"` (Lobos / B7240) |
 | `RATES` | Ajustá tarifas ARS por zona × peso si cambian |
-| `MP_CHECKOUT_READY` / `MP_CHECKOUT_URL` | Cuando tengas Checkout Pro, activá el pago unificado |
-| `MP_PRODUCT_LINKS` | Placeholders de links fijos por producto (legacy) |
+| `MP_CHECKOUT_READY` / `MP_WORKER_URL` | Worker de Checkout Pro (`…workers.dev`); ver `docs/worker/` |
+| `MP_PRODUCT_LINKS` | Legacy (ya no se usan con Checkout Pro) |
 
 ### Zonas (CP de 4 dígitos)
 
@@ -41,23 +41,24 @@ Opción más económica práctica orientativa (paquete según presentación). Ac
 
 Supuestos: tarifas de referencia para envío frágil/líquido; no es cotización en vivo de Andreani/Correo. El dueño debe alinearlas con su operador real.
 
-### Pago (Mercado Pago)
+### Pago (Mercado Pago Checkout Pro)
 
-Hoy el botón **Pagar** muestra el total (producto + envío) y deja `data-product`, `data-cp`, `data-zone`, `data-shipping`, `data-total` listos. Sin backend, el cobro unificado requiere **Checkout Pro** (preference con monto = total).
+El botón **Pagar** llama al Cloudflare Worker (`MP_WORKER_URL`) con `productId`, `cp`, `shipping` y `total`. El Worker crea una preference (ítem miel + envío) y redirige a `init_point`.
 
-**Camino siguiente (dueño):**
+Código del Worker: `docs/worker/` (secret `MP_ACCESS_TOKEN` — nunca en el sitio estático).
 
-1. Crear aplicación en [Mercado Pago Developers](https://www.mercadopago.com.ar/developers).
-2. Obtener Access Token (o preferencias/links dinámicos).
-3. Opción A (recomendada): backend mínimo / Cloudflare Worker gratis que cree una preference con `transaction_amount = total` y devolver `init_point`.
-4. Opción B: mientras tanto, recibir el pedido por mail (`contactonaturalezaactiva@gmail.com`) y mandar un link de pago por el total.
-5. Cuando exista la URL de checkout, en `shipping-config.js` poné `MP_CHECKOUT_READY: true` y `MP_CHECKOUT_URL` (o cableá la preference dinámica en `main.js`).
+1. `npx wrangler login` + `npx wrangler deploy` en `docs/worker/`
+2. `npx wrangler secret put MP_ACCESS_TOKEN`
+3. Pegá la URL del Worker en `js/shipping-config.js` → `MP_WORKER_URL`
+4. Republicá Pages
+
+Sin `MP_WORKER_URL`, el sitio muestra el aviso por mail (`contactonaturalezaactiva@gmail.com`).
 
 No uses WhatsApp para pedidos (preferencia del proyecto).
 
 ## Qué debe proveer el dueño
 
-1. **Mercado Pago:** Access Token + Checkout Pro (ideal) **o** links de pago actualizados por el total
+1. Cuenta Cloudflare (gratis) para desplegar el Worker — si el agente no pudo autenticar
 2. Fotos reales (reemplazar `assets/placeholders/`)
 3. (Opcional) Tarifas reales → tabla `RATES`
 

@@ -9,14 +9,13 @@ window.NA_CONFIG = {
   CONTACT_EMAIL: "contactonaturalezaactiva@gmail.com",
 
   /**
-   * Cuando haya Checkout Pro / preference dinámica, poné true y
-   * cableá MP_CHECKOUT_URL o el handler en main.js.
-   * Mientras sea false, "Pagar" queda listo con data-* y muestra el aviso.
+   * Checkout Pro vía Cloudflare Worker (preference dinámica = producto + envío).
+   * MP_WORKER_URL: URL del Worker desplegado (…workers.dev). Vacío = pago aún no listo.
    */
-  MP_CHECKOUT_READY: false,
-  MP_CHECKOUT_URL: "",
+  MP_CHECKOUT_READY: true,
+  MP_WORKER_URL: "https://naturaleza-activa-checkout.shimmer-ermine.workers.dev",
 
-  /* Links fijos de producto (placeholders hasta Checkout Pro). */
+  /* Legacy: links fijos por producto (ya no se usan con Checkout Pro). */
   MP_PRODUCT_LINKS: {
     "medio-kilo": "#mp-medio-kilo",
     kilo: "#mp-kilo",

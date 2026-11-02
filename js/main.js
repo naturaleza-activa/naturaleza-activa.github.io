@@ -83,6 +83,12 @@
     };
   }
 
+  function suggestProvince(zoneId) {
+    if (zoneId === "caba") return "CABA";
+    if (zoneId === "gba" || zoneId === "interior") return "Buenos Aires";
+    return "";
+  }
+
   /* —— Checkout UI —— */
   var form = document.querySelector("[data-checkout-form]");
   if (!form) return;
@@ -92,6 +98,7 @@
   var resultEl = document.querySelector("[data-checkout-result]");
   var errorEl = document.querySelector("[data-checkout-error]");
   var originEl = document.querySelectorAll("[data-origin-cp]");
+  var addressForm = document.querySelector("[data-address-form]");
   var payBtn = document.querySelector("[data-pay-btn]");
   var payNote = document.querySelector("[data-pay-note]");
 
@@ -107,10 +114,9 @@
 
   function clearResult() {
     if (resultEl) resultEl.hidden = true;
+    if (addressForm) addressForm.hidden = true;
     if (payBtn) {
       payBtn.hidden = true;
-      payBtn.removeAttribute("data-total");
-      payBtn.href = "#";
       payBtn.removeAttribute("aria-busy");
       payBtn.classList.remove("is-loading");
     }
@@ -118,6 +124,10 @@
 
   function checkoutReady() {
     return !!(cfg.MP_CHECKOUT_READY && cfg.MP_WORKER_URL);
+  }
+
+  function workerCheckoutUrl() {
+    return String(cfg.MP_WORKER_URL || "").replace(/\/$/, "") + "/checkout";
   }
 
   function renderQuote(q) {
@@ -132,22 +142,34 @@
     resultEl.querySelector("[data-q-shipping]").textContent = formatArs(q.shipping);
     resultEl.querySelector("[data-q-total]").textContent = formatArs(q.total);
 
-    if (!payBtn) return;
+    if (!addressForm || !payBtn) return;
+
+    addressForm.hidden = false;
+    addressForm.action = checkoutReady() ? workerCheckoutUrl() : "#compra-pago";
+    addressForm.method = checkoutReady() ? "post" : "get";
+
+    addressForm.querySelector('[name="productId"]').value = q.product.id;
+    addressForm.querySelector('[name="shipping"]').value = String(q.shipping);
+    addressForm.querySelector('[name="total"]').value = String(q.total);
+    addressForm.querySelector('[name="zone"]').value = q.zone.id;
+    addressForm.querySelector('[name="cp"]').value = q.cp;
+
+    var provinceSelect = addressForm.querySelector("[data-province]");
+    if (provinceSelect && !provinceSelect.value) {
+      var suggested = suggestProvince(q.zone.id);
+      if (suggested) provinceSelect.value = suggested;
+    }
+
     payBtn.hidden = false;
-    payBtn.setAttribute("data-product", q.product.id);
-    payBtn.setAttribute("data-cp", q.cp);
-    payBtn.setAttribute("data-zone", q.zone.id);
-    payBtn.setAttribute("data-shipping", String(q.shipping));
-    payBtn.setAttribute("data-total", String(q.total));
     payBtn.textContent = "Pagar " + formatArs(q.total);
-    payBtn.href = "#compra-pago";
-    payBtn.setAttribute("aria-disabled", "false");
+    payBtn.removeAttribute("aria-busy");
+    payBtn.classList.remove("is-loading");
 
     if (checkoutReady()) {
       if (payNote) {
         payNote.hidden = false;
         payNote.textContent =
-          "Al pagar abrís Mercado Pago Checkout Pro por el total (producto + envío).";
+          "Completá la dirección y pagá: abrís Mercado Pago por el total (producto + envío).";
       }
       var next = document.getElementById("compra-pago");
       if (next) next.hidden = true;
@@ -158,36 +180,34 @@
           "El total incluye envío. Checkout Pro se activa cuando el Worker esté desplegado. " +
           "Mientras tanto, escribinos a <a href=\"mailto:" +
           cfg.CONTACT_EMAIL +
-          "?subject=" +
-          encodeURIComponent("Pedido " + q.product.name + " — CP " + q.cp) +
-          "&body=" +
-          encodeURIComponent(
-            "Hola, quiero comprar:\n- Producto: " +
-              q.product.name +
-              " (" +
-              formatArs(q.product.price) +
-              ")\n- CP destino: " +
-              q.cp +
-              " (" +
-              q.zone.label +
-              ")\n- Envío estimado: " +
-              formatArs(q.shipping) +
-              "\n- Total: " +
-              formatArs(q.total) +
-              "\n\nOrigen cotizado desde CP " +
-              q.originCp +
-              ".\n"
-          ) +
           "\">" +
           cfg.CONTACT_EMAIL +
-          "</a> con este resumen y te mandamos el cobro exacto.";
+          "</a>.";
       }
     }
   }
 
-  function startCheckout(e) {
-    e.preventDefault();
+  function validateAddress(formEl) {
+    var name = (formEl.querySelector('[name="name"]').value || "").trim();
+    var phone = (formEl.querySelector('[name="phone"]').value || "").trim();
+    var street = (formEl.querySelector('[name="street"]').value || "").trim();
+    var city = (formEl.querySelector('[name="city"]').value || "").trim();
+    var province = (formEl.querySelector('[name="province"]').value || "").trim();
+    var cp = (formEl.querySelector('[name="cp"]').value || "").replace(/\D/g, "").slice(0, 4);
+    formEl.querySelector('[name="cp"]').value = cp;
+
+    if (name.length < 3) return "Ingresá nombre y apellido.";
+    if (phone.replace(/\D/g, "").length < 8) return "Ingresá un teléfono válido.";
+    if (street.length < 3) return "Ingresá calle y número.";
+    if (city.length < 2) return "Ingresá la ciudad.";
+    if (!province) return "Elegí la provincia.";
+    if (!/^\d{4}$/.test(cp)) return "CP inválido.";
+    return null;
+  }
+
+  function onAddressSubmit(e) {
     if (!checkoutReady()) {
+      e.preventDefault();
       var panel = document.getElementById("compra-pago");
       if (panel) {
         panel.hidden = false;
@@ -196,27 +216,20 @@
       return;
     }
 
-    var productId = payBtn.getAttribute("data-product");
-    var cp = payBtn.getAttribute("data-cp");
-    var shipping = payBtn.getAttribute("data-shipping");
-    var total = payBtn.getAttribute("data-total");
-    if (!productId || !cp || !shipping || !total) {
-      setError("Recalculá el envío antes de pagar.");
+    var err = validateAddress(addressForm);
+    if (err) {
+      e.preventDefault();
+      setError(err);
       return;
     }
 
     setError("");
-    /* Full-page navigation (not fetch): survives Cloudflare interstitial on workers.dev */
-    var endpoint = String(cfg.MP_WORKER_URL).replace(/\/$/, "") + "/checkout";
-    var params = new URLSearchParams({
-      productId: productId,
-      cp: cp,
-      shipping: String(shipping),
-      total: String(total)
-    });
-    payBtn.setAttribute("aria-busy", "true");
-    payBtn.textContent = "Conectando con Mercado Pago…";
-    window.location.href = endpoint + "?" + params.toString();
+    if (payBtn) {
+      payBtn.setAttribute("aria-busy", "true");
+      payBtn.classList.add("is-loading");
+      payBtn.textContent = "Conectando con Mercado Pago…";
+    }
+    /* Native form POST → Worker → 302 Mercado Pago */
   }
 
   /* Show Worker/checkout errors returned via ?checkout_error=…#compra */
@@ -230,13 +243,14 @@
       if (target) target.scrollIntoView({ behavior: "smooth" });
       if (window.history && window.history.replaceState) {
         params.delete("checkout_error");
-        var next = window.location.pathname + (params.toString() ? "?" + params.toString() : "") + "#compra";
+        var next =
+          window.location.pathname +
+          (params.toString() ? "?" + params.toString() : "") +
+          "#compra";
         window.history.replaceState(null, "", next);
       }
     } catch (_) {}
   })();
-
-
 
   function runQuote() {
     var productId = productSelect.value;
@@ -256,6 +270,10 @@
     runQuote();
   });
 
+  if (addressForm) {
+    addressForm.addEventListener("submit", onAddressSubmit);
+  }
+
   document.querySelectorAll("[data-buy]").forEach(function (btn) {
     btn.addEventListener("click", function (e) {
       e.preventDefault();
@@ -268,8 +286,4 @@
       setError("");
     });
   });
-
-  if (payBtn) {
-    payBtn.addEventListener("click", startCheckout);
-  }
 })();

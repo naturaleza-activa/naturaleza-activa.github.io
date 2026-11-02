@@ -202,26 +202,94 @@
             </div>
           </dl>
 
-          <div class="checkout__pay">
-            <a
-              class="btn btn--solid"
-              href="#compra-pago"
-              data-pay-btn
-              hidden
-              data-product=""
-              data-cp=""
-              data-zone=""
-              data-shipping=""
-              data-total=""
-            >Pagar</a>
-            <p class="checkout__pay-note" data-pay-note hidden></p>
-          </div>
+          <form
+            class="checkout__address"
+            data-address-form
+            method="post"
+            action="#"
+            hidden
+          >
+            <p class="checkout__address-title">Datos de envío</p>
+            <p class="checkout__address-lede">
+              Los necesitamos para despachar. Van a la preferencia de Mercado Pago.
+            </p>
+            <input type="hidden" name="productId" value="">
+            <input type="hidden" name="shipping" value="">
+            <input type="hidden" name="total" value="">
+            <input type="hidden" name="zone" value="">
+
+            <div class="checkout__address-grid">
+              <label class="field field--full">
+                <span class="field__label">Nombre y apellido</span>
+                <input type="text" name="name" autocomplete="name" required maxlength="80" placeholder="María Pérez">
+              </label>
+              <label class="field">
+                <span class="field__label">Teléfono</span>
+                <input type="tel" name="phone" autocomplete="tel" required maxlength="20" inputmode="tel" placeholder="11 5555-5555">
+              </label>
+              <label class="field">
+                <span class="field__label">Código postal</span>
+                <input type="text" name="cp" inputmode="numeric" pattern="[0-9]{4}" maxlength="4" required autocomplete="postal-code">
+              </label>
+              <label class="field field--full">
+                <span class="field__label">Calle y número</span>
+                <input type="text" name="street" autocomplete="street-address" required maxlength="120" placeholder="Av. San Martín 1234">
+              </label>
+              <label class="field">
+                <span class="field__label">Piso / depto <span class="field__optional">(opcional)</span></span>
+                <input type="text" name="floor" autocomplete="address-line2" maxlength="40" placeholder="3° B">
+              </label>
+              <label class="field">
+                <span class="field__label">Ciudad</span>
+                <input type="text" name="city" autocomplete="address-level2" required maxlength="80" placeholder="Lobos">
+              </label>
+              <label class="field field--full">
+                <span class="field__label">Provincia</span>
+                <select name="province" autocomplete="address-level1" required data-province>
+                  <option value="">Elegí provincia</option>
+                  <option>Buenos Aires</option>
+                  <option>CABA</option>
+                  <option>Catamarca</option>
+                  <option>Chaco</option>
+                  <option>Chubut</option>
+                  <option>Córdoba</option>
+                  <option>Corrientes</option>
+                  <option>Entre Ríos</option>
+                  <option>Formosa</option>
+                  <option>Jujuy</option>
+                  <option>La Pampa</option>
+                  <option>La Rioja</option>
+                  <option>Mendoza</option>
+                  <option>Misiones</option>
+                  <option>Neuquén</option>
+                  <option>Río Negro</option>
+                  <option>Salta</option>
+                  <option>San Juan</option>
+                  <option>San Luis</option>
+                  <option>Santa Cruz</option>
+                  <option>Santa Fe</option>
+                  <option>Santiago del Estero</option>
+                  <option>Tierra del Fuego</option>
+                  <option>Tucumán</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="checkout__pay">
+              <button
+                type="submit"
+                class="btn btn--solid"
+                data-pay-btn
+                hidden
+              >Pagar</button>
+              <p class="checkout__pay-note" data-pay-note hidden></p>
+            </div>
+          </form>
 
           <div id="compra-pago" class="checkout__next" hidden>
             <p class="checkout__next-title">Siguiente paso</p>
             <p>
-              El total de arriba ya incluye producto + envío. Con Checkout Pro activo,
-              el botón <strong>Pagar</strong> crea el cobro en Mercado Pago y te redirige.
+              Completá los datos de envío y pagá. El total incluye producto + envío.
               Si el pago no abre, escribinos a
               <a href="mailto:contactonaturalezaactiva@gmail.com">contactonaturalezaactiva@gmail.com</a>.
             </p>

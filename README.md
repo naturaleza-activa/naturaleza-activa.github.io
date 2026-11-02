@@ -43,7 +43,7 @@ Supuestos: tarifas de referencia para envío frágil/líquido; no es cotización
 
 ### Pago (Mercado Pago Checkout Pro)
 
-Tras cotizar, el comprador completa **datos de envío** (nombre, teléfono, dirección, ciudad, provincia, CP). El formulario hace POST al Cloudflare Worker (`MP_WORKER_URL`), que crea una preference Checkout Pro (miel + envío) con `shipments.receiver_address`, `payer` y `metadata`/`description` para que el dueño vea la dirección en Mercado Pago, y redirige a `init_point`.
+Tras cotizar, el comprador completa **datos de envío** (nombre, DNI, email, teléfono, dirección, ciudad, provincia, CP). El formulario hace POST al Cloudflare Worker (`MP_WORKER_URL`), que crea una preference Checkout Pro (miel + envío) con `payer.email`, `payer.identification` (DNI), `shipments.receiver_address` y `metadata`/`description` (útil para etiquetas Correo Argentino), y redirige a `init_point`.
 
 Código del Worker: `docs/worker/` (secret `MP_ACCESS_TOKEN` — nunca en el sitio estático).
 

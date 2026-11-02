@@ -189,14 +189,19 @@
 
   function validateAddress(formEl) {
     var name = (formEl.querySelector('[name="name"]').value || "").trim();
+    var dni = (formEl.querySelector('[name="dni"]').value || "").replace(/\D/g, "").slice(0, 8);
+    var email = (formEl.querySelector('[name="email"]').value || "").trim();
     var phone = (formEl.querySelector('[name="phone"]').value || "").trim();
     var street = (formEl.querySelector('[name="street"]').value || "").trim();
     var city = (formEl.querySelector('[name="city"]').value || "").trim();
     var province = (formEl.querySelector('[name="province"]').value || "").trim();
     var cp = (formEl.querySelector('[name="cp"]').value || "").replace(/\D/g, "").slice(0, 4);
+    formEl.querySelector('[name="dni"]').value = dni;
     formEl.querySelector('[name="cp"]').value = cp;
 
     if (name.length < 3) return "Ingresá nombre y apellido.";
+    if (!/^\d{7,8}$/.test(dni)) return "Ingresá un DNI válido (7 u 8 dígitos).";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return "Ingresá un email válido.";
     if (phone.replace(/\D/g, "").length < 8) return "Ingresá un teléfono válido.";
     if (street.length < 3) return "Ingresá calle y número.";
     if (city.length < 2) return "Ingresá la ciudad.";

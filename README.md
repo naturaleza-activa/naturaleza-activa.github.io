@@ -2,62 +2,80 @@
 
 Sitio de una sola página para la miel artesanal de Lobos. Abrí `index.html` en el navegador: no hace falta servidor.
 
-## Qué reemplazar (dueño)
+**Live:** https://naturaleza-activa.github.io/
 
-### 1. Links de Mercado Pago (3)
+## Cotizador de envío (CP)
 
-En `index.html`, buscá los botones `Comprar` y cambiá el `href`:
+Flujo: elegir presentación → ingresar CP destino → ver zona, envío más económico y **total = producto + envío**.
 
-| Presentación | Placeholder actual | Pegá el link real |
-|---|---|---|
-| ½ kg | `href="#mp-medio-kilo"` | link MP del medio kilo |
-| 1 kg | `href="#mp-kilo"` | link MP del kilo |
-| Balde 10 kg | `href="#mp-balde"` | link MP del balde |
+### Configuración (un solo archivo)
 
-Los comentarios HTML encima de cada botón marcan exactamente dónde pegar.
+En `js/shipping-config.js`:
 
-### 2. Mail de contacto
-
-Ya configurado: `contactonaturalezaactiva@gmail.com` (mailto + texto visible en `#contacto`).
-
-### 3. Fotos
-
-Archivos en `assets/placeholders/`:
-
-| Archivo | Uso |
+| Constante | Qué hacer |
 |---|---|
-| `hero.svg` | Fondo del hero (campo / atardecer) |
-| `colmenas.svg` | Sección historia |
-| `producto-medio-kilo.svg` | Producto ½ kg |
-| `producto-kilo.svg` | Producto 1 kg |
-| `producto-balde.svg` | Producto balde |
+| `ORIGIN_CP` | Ya: `"7240"` (Lobos / B7240) |
+| `RATES` | Ajustá tarifas ARS por zona × peso si cambian |
+| `MP_CHECKOUT_READY` / `MP_CHECKOUT_URL` | Cuando tengas Checkout Pro, activá el pago unificado |
+| `MP_PRODUCT_LINKS` | Placeholders de links fijos por producto (legacy) |
 
-Podés reemplazar cada SVG por un JPG/PNG con el mismo nombre (o actualizar las rutas `src` en `index.html`). Ideal: fotos propias, horizontales para hero/colmenas, cuadradas para productos.
+### Zonas (CP de 4 dígitos)
 
-## Publicar en GitHub Pages (mínimo)
+| Zona | Rango usado |
+|---|---|
+| CABA | 1000–1499 |
+| GBA / AMBA | 1500–1999 |
+| Interior | resto (salvo Patagonia) |
+| Patagonia / Sur | 8300–9420 |
 
-Requiere `gh` autenticado (`gh auth login`).
+### Tarifas estimadas actuales (ARS)
+
+Opción más económica práctica orientativa (paquete según presentación). Actualizá en `RATES` cuando tengas valores reales del correo/courier.
+
+| Zona | ½ kg | 1 kg | 10 kg |
+|---|---:|---:|---:|
+| CABA | 4.500 | 5.500 | 12.500 |
+| GBA / AMBA | 5.500 | 6.500 | 14.500 |
+| Interior | 7.500 | 9.000 | 22.000 |
+| Patagonia / Sur | 11.000 | 13.000 | 32.000 |
+
+Supuestos: tarifas de referencia para envío frágil/líquido; no es cotización en vivo de Andreani/Correo. El dueño debe alinearlas con su operador real.
+
+### Pago (Mercado Pago)
+
+Hoy el botón **Pagar** muestra el total (producto + envío) y deja `data-product`, `data-cp`, `data-zone`, `data-shipping`, `data-total` listos. Sin backend, el cobro unificado requiere **Checkout Pro** (preference con monto = total).
+
+**Camino siguiente (dueño):**
+
+1. Crear aplicación en [Mercado Pago Developers](https://www.mercadopago.com.ar/developers).
+2. Obtener Access Token (o preferencias/links dinámicos).
+3. Opción A (recomendada): backend mínimo / Cloudflare Worker gratis que cree una preference con `transaction_amount = total` y devolver `init_point`.
+4. Opción B: mientras tanto, recibir el pedido por mail (`contactonaturalezaactiva@gmail.com`) y mandar un link de pago por el total.
+5. Cuando exista la URL de checkout, en `shipping-config.js` poné `MP_CHECKOUT_READY: true` y `MP_CHECKOUT_URL` (o cableá la preference dinámica en `main.js`).
+
+No uses WhatsApp para pedidos (preferencia del proyecto).
+
+## Qué debe proveer el dueño
+
+1. **Mercado Pago:** Access Token + Checkout Pro (ideal) **o** links de pago actualizados por el total
+2. Fotos reales (reemplazar `assets/placeholders/`)
+3. (Opcional) Tarifas reales → tabla `RATES`
+
+CP de origen ya cargado: `7240` (Lobos / B7240).
+
+Mail ya configurado: `contactonaturalezaactiva@gmail.com`
+
+## Publicar (repo user-site)
+
+Cuenta: `naturaleza-activa` → repo `naturaleza-activa.github.io` → https://naturaleza-activa.github.io/
 
 ```bash
-# Desde esta carpeta docs/site/
-gh repo create naturaleza-activa --public --source=. --remote=origin --push
-gh api -X PUT "repos/$(gh api user -q .login)/naturaleza-activa/pages" \
-  -f build_type=legacy \
-  -f source='{"branch":"main","path":"/"}'
+cd docs/site   # o esta carpeta
+gh auth switch --user naturaleza-activa
+gh auth setup-git
+git add -A
+git commit -m "Actualización sitio"
+git push origin main
 ```
 
-URL esperada: `https://<tu-usuario>.github.io/naturaleza-activa/`
-
-Si el repo ya existe vacío:
-
-```bash
-git init
-git add .
-git commit -m "Sitio Naturaleza Activa"
-git branch -M main
-git remote add origin https://github.com/<tu-usuario>/naturaleza-activa.git
-git push -u origin main
-# luego el comando gh api .../pages de arriba
-```
-
-Costo mensual: $0 (GitHub Pages gratis en repos públicos).
+Costo mensual: $0 (GitHub Pages).

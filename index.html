@@ -85,7 +85,7 @@
         <header class="section__header reveal">
           <p class="eyebrow">Presentaciones</p>
           <h2 id="productos-titulo">Miel para tu casa</h2>
-          <p class="section__lede">Elegí el tamaño. El pago es por Mercado Pago (el dueño pegará los links reales).</p>
+          <p class="section__lede">Elegí el tamaño, cotizá el envío con tu código postal y pagá el total.</p>
         </header>
 
         <ul class="product-list">
@@ -102,8 +102,7 @@
               <h3 class="product__name">½ kilo</h3>
               <p class="product__price"><span class="product__currency">$</span>5.000 <span class="product__ars">ARS</span></p>
               <p class="product__note">Ideal para conocer el sabor.</p>
-              <!-- OWNER: pegá el link de Mercado Pago del medio kilo abajo -->
-              <a class="btn btn--solid btn--block" href="#mp-medio-kilo" data-mp="medio-kilo">Comprar ½ kg</a>
+              <a class="btn btn--solid btn--block" href="#compra" data-buy="medio-kilo">Comprar ½ kg</a>
             </div>
           </li>
 
@@ -120,8 +119,7 @@
               <h3 class="product__name">1 kilo</h3>
               <p class="product__price"><span class="product__currency">$</span>9.000 <span class="product__ars">ARS</span></p>
               <p class="product__note">La presentación más pedida.</p>
-              <!-- OWNER: pegá el link de Mercado Pago del kilo abajo -->
-              <a class="btn btn--solid btn--block" href="#mp-kilo" data-mp="kilo">Comprar 1 kg</a>
+              <a class="btn btn--solid btn--block" href="#compra" data-buy="kilo">Comprar 1 kg</a>
             </div>
           </li>
 
@@ -138,21 +136,110 @@
               <h3 class="product__name">Balde 10 kg</h3>
               <p class="product__price"><span class="product__currency">$</span>35.000 <span class="product__ars">ARS</span></p>
               <p class="product__note">Para stock o uso intensivo.</p>
-              <!-- OWNER: pegá el link de Mercado Pago del balde abajo -->
-              <a class="btn btn--solid btn--block" href="#mp-balde" data-mp="balde">Comprar balde</a>
+              <a class="btn btn--solid btn--block" href="#compra" data-buy="balde">Comprar balde</a>
             </div>
           </li>
         </ul>
       </div>
     </section>
 
+    <section id="compra" class="section checkout" aria-labelledby="compra-titulo">
+      <div class="section__inner checkout__inner reveal">
+        <header class="section__header">
+          <p class="eyebrow">Compra</p>
+          <h2 id="compra-titulo">Cotizá el envío y pagá</h2>
+          <p class="section__lede">
+            Ingresá el código postal de destino. Calculamos la opción más económica según zona y tamaño del paquete.
+            Origen: CP <span data-origin-cp>7240</span> · Lobos (B7240).
+          </p>
+        </header>
+
+        <form class="checkout__form" data-checkout-form>
+          <div class="checkout__fields">
+            <label class="field">
+              <span class="field__label">Presentación</span>
+              <select name="product" required>
+                <option value="medio-kilo">½ kilo — $5.000</option>
+                <option value="kilo" selected>1 kilo — $9.000</option>
+                <option value="balde">Balde 10 kg — $35.000</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field__label">Código postal destino</span>
+              <input
+                type="text"
+                name="cp"
+                inputmode="numeric"
+                pattern="[0-9]{4}"
+                maxlength="4"
+                placeholder="Ej. 1406"
+                autocomplete="postal-code"
+                required
+              >
+            </label>
+            <button type="submit" class="btn btn--solid checkout__calc">Calcular envío</button>
+          </div>
+          <p class="checkout__error" data-checkout-error hidden></p>
+        </form>
+
+        <div class="checkout__result" data-checkout-result hidden>
+          <dl class="quote">
+            <div class="quote__row">
+              <dt>Producto</dt>
+              <dd><span data-q-product></span> · <span data-q-product-price></span></dd>
+            </div>
+            <div class="quote__row">
+              <dt>Destino</dt>
+              <dd>CP <span data-q-cp></span> · <span data-q-zone></span></dd>
+            </div>
+            <div class="quote__row">
+              <dt>Envío (más económico)</dt>
+              <dd data-q-shipping></dd>
+            </div>
+            <div class="quote__row quote__row--total">
+              <dt>Total</dt>
+              <dd data-q-total></dd>
+            </div>
+          </dl>
+
+          <div class="checkout__pay">
+            <a
+              class="btn btn--solid"
+              href="#compra-pago"
+              data-pay-btn
+              hidden
+              data-product=""
+              data-cp=""
+              data-zone=""
+              data-shipping=""
+              data-total=""
+            >Pagar</a>
+            <p class="checkout__pay-note" data-pay-note hidden></p>
+          </div>
+
+          <div id="compra-pago" class="checkout__next" hidden>
+            <p class="checkout__next-title">Siguiente paso</p>
+            <p>
+              El total de arriba ya incluye producto + envío. Cuando Checkout Pro esté configurado,
+              el botón <strong>Pagar</strong> abrirá Mercado Pago por ese monto.
+              Hasta entonces, el link de pago se ajustará al total — escribinos y te lo enviamos.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="envios" class="section shipping" aria-labelledby="envios-titulo">
       <div class="section__inner shipping__panel reveal">
         <p class="eyebrow">Envíos</p>
-        <h2 id="envios-titulo">Llegamos a todo el país</h2>
+        <h2 id="envios-titulo">A todo el país, al mejor precio práctico</h2>
         <p>
-          Enviamos a toda la Argentina con la opción más económica y práctica según destino.
-          Al confirmar la compra te contamos el costo exacto y el tiempo estimado.
+          Cotizás con tu código postal: usamos zonas (CABA, GBA/AMBA, Interior, Patagonia/Sur)
+          y el tamaño del paquete (½ kg, 1 kg o balde 10 kg) para estimar la opción más económica.
+          El total de la compra es <strong>producto + envío</strong>.
+        </p>
+        <p>
+          Origen del cotizador: CP <span data-origin-cp>7240</span> · Lobos (B7240).
         </p>
       </div>
     </section>
@@ -178,6 +265,7 @@
     </div>
   </footer>
 
+  <script src="js/shipping-config.js" defer></script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

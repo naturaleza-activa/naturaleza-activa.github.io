@@ -43,7 +43,9 @@ Supuestos: tarifas de referencia para envío frágil/líquido; no es cotización
 
 ### Pago (Mercado Pago Checkout Pro)
 
-Tras cotizar, el comprador completa **datos de envío** (nombre, DNI, email, teléfono, dirección, ciudad, provincia, CP). El formulario hace POST al Cloudflare Worker (`MP_WORKER_URL`), que crea una preference Checkout Pro (miel + envío) con `payer.email`, `payer.identification` (DNI), `shipments.receiver_address` y `metadata`/`description` (útil para etiquetas Correo Argentino), y redirige a `init_point`.
+Tras cotizar, el comprador completa **datos de envío** (nombre, DNI, email, teléfono, dirección, ciudad, provincia, CP). El formulario hace POST al Cloudflare Worker (`MP_WORKER_URL`), que crea una preference Checkout Pro (miel + envío) con `payer.email`, `payer.identification` (DNI), `shipments.receiver_address`, `metadata` y `notification_url` al webhook del Worker.
+
+Cuando Mercado Pago aprueba el pago, el Worker genera una **etiqueta imprimible** (`/label?payment_id=…`) estilo Correo Argentino. Si existe el secret `RESEND_API_KEY`, también la manda a `contactonaturalezaactiva@gmail.com`. Ver `docs/worker/README.md`.
 
 Código del Worker: `docs/worker/` (secret `MP_ACCESS_TOKEN` — nunca en el sitio estático).
 

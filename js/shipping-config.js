@@ -13,7 +13,7 @@ window.NA_CONFIG = {
    * MP_WORKER_URL: URL del Worker desplegado (…workers.dev). Vacío = pago aún no listo.
    */
   MP_CHECKOUT_READY: true,
-  MP_WORKER_URL: "https://naturaleza-activa-checkout.graceful-tarantula.workers.dev",
+  MP_WORKER_URL: "https://naturaleza-activa-checkout.goldenrod-locket.workers.dev",
 
   /* Legacy: links fijos por producto (ya no se usan con Checkout Pro). */
   MP_PRODUCT_LINKS: {

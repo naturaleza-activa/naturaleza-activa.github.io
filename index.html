@@ -19,6 +19,7 @@
       <nav class="site-nav" aria-label="Principal">
         <a href="#historia">Historia</a>
         <a href="#productos">Productos</a>
+        <a href="#promos">Promos</a>
         <a href="#envios">Envíos</a>
         <a href="#contacto">Contacto</a>
       </nav>
@@ -101,7 +102,7 @@
             <div class="product__body">
               <h3 class="product__name">½ kilo</h3>
               <p class="product__price"><span class="product__currency">$</span>5.000 <span class="product__ars">ARS</span></p>
-              <p class="product__note">Ideal para conocer el sabor.</p>
+              <p class="product__note">$10.000/kg · ideal para conocer el sabor.</p>
               <a class="btn btn--solid btn--block" href="#compra" data-buy="medio-kilo">Comprar ½ kg</a>
             </div>
           </li>
@@ -117,8 +118,8 @@
             >
             <div class="product__body">
               <h3 class="product__name">1 kilo</h3>
-              <p class="product__price"><span class="product__currency">$</span>9.000 <span class="product__ars">ARS</span></p>
-              <p class="product__note">La presentación más pedida.</p>
+              <p class="product__price"><span class="product__currency">$</span>9.500 <span class="product__ars">ARS</span></p>
+              <p class="product__note">$9.500/kg · la presentación más pedida.</p>
               <a class="btn btn--solid btn--block" href="#compra" data-buy="kilo">Comprar 1 kg</a>
             </div>
           </li>
@@ -134,10 +135,45 @@
             >
             <div class="product__body">
               <h3 class="product__name">Balde 10 kg</h3>
-              <p class="product__price"><span class="product__currency">$</span>35.000 <span class="product__ars">ARS</span></p>
-              <p class="product__note">Para stock o uso intensivo.</p>
+              <p class="product__price"><span class="product__currency">$</span>65.000 <span class="product__ars">ARS</span></p>
+              <p class="product__note">$6.500/kg · precio por volumen.</p>
               <a class="btn btn--solid btn--block" href="#compra" data-buy="balde">Comprar balde</a>
             </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="promos" class="section promos" aria-labelledby="promos-titulo">
+      <div class="section__inner">
+        <header class="section__header reveal">
+          <p class="eyebrow">Promociones</p>
+          <h2 id="promos-titulo">Combos para llevar más</h2>
+          <p class="section__lede">Mejor precio por kilo. El envío se cotiza con tu CP (salvo el pack con envío bonificado).</p>
+        </header>
+
+        <ul class="promo-list">
+          <li class="promo reveal">
+            <h3 class="promo__name">Combo familiar</h3>
+            <p class="promo__size">2 kilos</p>
+            <p class="promo__price"><span class="product__currency">$</span>18.000</p>
+            <p class="promo__note">Ahorrás $1.000 vs comprar dos kilos sueltos. $9.000/kg. Envío aparte.</p>
+            <a class="btn btn--solid btn--block" href="#compra" data-buy="combo-familiar">Comprar combo familiar</a>
+          </li>
+          <li class="promo reveal">
+            <h3 class="promo__name">Combo ahorro</h3>
+            <p class="promo__size">3 kilos</p>
+            <p class="promo__price"><span class="product__currency">$</span>26.000</p>
+            <p class="promo__note">Ahorrás $2.500 vs tres kilos sueltos. $8.667/kg. Envío aparte.</p>
+            <a class="btn btn--solid btn--block" href="#compra" data-buy="combo-ahorro">Comprar combo ahorro</a>
+          </li>
+          <li class="promo promo--featured reveal">
+            <p class="promo__badge">Destacado</p>
+            <h3 class="promo__name">Pack 3 kilos con envío gratis</h3>
+            <p class="promo__size">3 kilos</p>
+            <p class="promo__price"><span class="product__currency">$</span>31.900</p>
+            <p class="promo__note">Hasta $6.500 de envío bonificado. Sujeto a cobertura geográfica.</p>
+            <a class="btn btn--solid btn--block" href="#compra" data-buy="pack-3kg-envio">Comprar pack con envío</a>
           </li>
         </ul>
       </div>
@@ -160,8 +196,11 @@
               <span class="field__label">Presentación</span>
               <select name="product" required>
                 <option value="medio-kilo">½ kilo — $5.000</option>
-                <option value="kilo" selected>1 kilo — $9.000</option>
-                <option value="balde">Balde 10 kg — $35.000</option>
+                <option value="kilo" selected>1 kilo — $9.500</option>
+                <option value="balde">Balde 10 kg — $65.000</option>
+                <option value="combo-familiar">Combo familiar 2 kg — $18.000</option>
+                <option value="combo-ahorro">Combo ahorro 3 kg — $26.000</option>
+                <option value="pack-3kg-envio">Pack 3 kg envío gratis — $31.900</option>
               </select>
             </label>
             <label class="field">

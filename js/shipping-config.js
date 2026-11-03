@@ -15,31 +15,53 @@ window.NA_CONFIG = {
   MP_CHECKOUT_READY: true,
   MP_WORKER_URL: "https://naturaleza-activa-checkout.goldenrod-locket.workers.dev",
 
-  /* Legacy: links fijos por producto (ya no se usan con Checkout Pro). */
-  MP_PRODUCT_LINKS: {
-    "medio-kilo": "#mp-medio-kilo",
-    kilo: "#mp-kilo",
-    balde: "#mp-balde"
-  },
-
   PRODUCTS: {
     "medio-kilo": {
       id: "medio-kilo",
       name: "½ kilo",
       weightKg: 0.5,
-      price: 5000
+      price: 5000,
+      perKg: 10000
     },
     kilo: {
       id: "kilo",
       name: "1 kilo",
       weightKg: 1,
-      price: 9000
+      price: 9500,
+      perKg: 9500
     },
     balde: {
       id: "balde",
       name: "Balde 10 kg",
       weightKg: 10,
-      price: 35000
+      price: 65000,
+      perKg: 6500
+    },
+    "combo-familiar": {
+      id: "combo-familiar",
+      name: "Combo familiar — 2 kilos",
+      weightKg: 2,
+      price: 18000,
+      perKg: 9000,
+      promo: true
+    },
+    "combo-ahorro": {
+      id: "combo-ahorro",
+      name: "Combo ahorro — 3 kilos",
+      weightKg: 3,
+      price: 26000,
+      perKg: 8667,
+      promo: true
+    },
+    "pack-3kg-envio": {
+      id: "pack-3kg-envio",
+      name: "Pack 3 kilos con envío gratis",
+      weightKg: 3,
+      price: 31900,
+      perKg: 10633,
+      promo: true,
+      /* Bonifica hasta $6.500 de envío (sujeto a zona). */
+      freeShippingUpTo: 6500
     }
   },
 
@@ -52,13 +74,12 @@ window.NA_CONFIG = {
 
   /**
    * Tarifas estimadas (ARS) — opción más económica práctica por zona y peso.
-   * Claves de peso: "0.5" | "1" | "10"
-   * Valores orientativos; el dueño puede actualizarlos cuando tenga tarifas reales.
+   * Claves: "0.5" | "1" | "2" | "3" | "10"
    */
   RATES: {
-    caba: { "0.5": 4500, "1": 5500, "10": 12500 },
-    gba: { "0.5": 5500, "1": 6500, "10": 14500 },
-    interior: { "0.5": 7500, "1": 9000, "10": 22000 },
-    patagonia: { "0.5": 11000, "1": 13000, "10": 32000 }
+    caba: { "0.5": 4500, "1": 5500, "2": 6500, "3": 7500, "10": 12500 },
+    gba: { "0.5": 5500, "1": 6500, "2": 7500, "3": 8500, "10": 14500 },
+    interior: { "0.5": 7500, "1": 9000, "2": 11000, "3": 13000, "10": 22000 },
+    patagonia: { "0.5": 11000, "1": 13000, "2": 16000, "3": 19000, "10": 32000 }
   }
 };

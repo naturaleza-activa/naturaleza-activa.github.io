@@ -48,6 +48,8 @@
   function weightKey(weightKg) {
     if (weightKg <= 0.5) return "0.5";
     if (weightKg <= 1) return "1";
+    if (weightKg <= 2) return "2";
+    if (weightKg <= 3) return "3";
     return "10";
   }
 
@@ -60,6 +62,20 @@
     );
   }
 
+  function applyShippingBonus(rawShipping, product) {
+    var cap = product && product.freeShippingUpTo;
+    if (typeof cap !== "number" || cap <= 0) {
+      return { shipping: rawShipping, rawShipping: rawShipping, freeShipping: false };
+    }
+    var shipping = Math.max(0, rawShipping - cap);
+    return {
+      shipping: shipping,
+      rawShipping: rawShipping,
+      freeShipping: shipping === 0,
+      shippingBonus: Math.min(cap, rawShipping)
+    };
+  }
+
   function quoteShipping(productId, cp) {
     var product = cfg.PRODUCTS[productId];
     if (!product) return { error: "Elegí una presentación." };
@@ -70,15 +86,20 @@
 
     var zone = cfg.ZONES[zoneId];
     var wk = weightKey(product.weightKg);
-    var shipping = cfg.RATES[zoneId][wk];
-    if (typeof shipping !== "number") return { error: "Sin tarifa para esa combinación." };
+    var rawShipping = cfg.RATES[zoneId][wk];
+    if (typeof rawShipping !== "number") return { error: "Sin tarifa para esa combinación." };
+
+    var ship = applyShippingBonus(rawShipping, product);
 
     return {
       product: product,
       cp: cp,
       zone: zone,
-      shipping: shipping,
-      total: product.price + shipping,
+      shipping: ship.shipping,
+      rawShipping: ship.rawShipping,
+      freeShipping: ship.freeShipping,
+      shippingBonus: ship.shippingBonus || 0,
+      total: product.price + ship.shipping,
       originCp: cfg.ORIGIN_CP
     };
   }
@@ -139,7 +160,13 @@
     resultEl.querySelector("[data-q-product-price]").textContent = formatArs(q.product.price);
     resultEl.querySelector("[data-q-zone]").textContent = q.zone.label;
     resultEl.querySelector("[data-q-cp]").textContent = q.cp;
-    resultEl.querySelector("[data-q-shipping]").textContent = formatArs(q.shipping);
+    var shipLabel = formatArs(q.shipping);
+    if (q.freeShipping) {
+      shipLabel = "Gratis";
+    } else if (q.shippingBonus) {
+      shipLabel = formatArs(q.shipping) + " (bonificamos " + formatArs(q.shippingBonus) + ")";
+    }
+    resultEl.querySelector("[data-q-shipping]").textContent = shipLabel;
     resultEl.querySelector("[data-q-total]").textContent = formatArs(q.total);
 
     if (!addressForm || !payBtn) return;

@@ -435,6 +435,40 @@
 
   <script src="js/shipping-config.js" defer></script>
   <script src="js/main.js" defer></script>
-  <script type="module" src="js/panal/main.js"></script>
+  <!-- Clear panal progress BEFORE module boot (kills legacy localStorage even if an old bundle loads) -->
+  <script>
+    (function () {
+      try {
+        var re = /panal|honeycomb|na-panal/i;
+        var known = [
+          "na-panal-v1",
+          "na-panal-v2",
+          "na-panal",
+          "panal-progress",
+          "panalProgress",
+          "naturaleza-panal",
+        ];
+        function wipe(store) {
+          if (!store) return;
+          for (var i = 0; i < known.length; i++) {
+            try {
+              store.removeItem(known[i]);
+            } catch (e) {}
+          }
+          for (var j = store.length - 1; j >= 0; j--) {
+            var k = store.key(j);
+            if (k && re.test(k)) {
+              try {
+                store.removeItem(k);
+              } catch (e) {}
+            }
+          }
+        }
+        wipe(window.localStorage);
+        wipe(window.sessionStorage);
+      } catch (e) {}
+    })();
+  </script>
+  <script type="module" src="js/panal/main.js?v=20261106-reset3"></script>
 </body>
 </html>

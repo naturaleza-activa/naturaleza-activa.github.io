@@ -8,8 +8,10 @@ export function createJar(canvas) {
   let fill = 0; // 0..1
   let display = 0;
 
-  function setFilledCount(n) {
+  function setFilledCount(n, snap) {
     fill = Math.max(0, Math.min(1, n / JAR_GOAL));
+    // Snap instantly on reset so a full jar never lingers after reload
+    if (snap || n <= 0) display = fill;
   }
 
   function resize() {

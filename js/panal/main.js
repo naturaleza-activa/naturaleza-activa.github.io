@@ -1,4 +1,4 @@
-import { CELL, JAR_GOAL, PALETTE } from "./palette.js";
+import { CELL, JAR_GOAL, PALETTE, PANAL_ASSET_V } from "./palette.js";
 import {
   GRID_COLS,
   GRID_ROWS,
@@ -11,7 +11,7 @@ import {
 } from "./hex.js";
 export { CURIOSITIES } from "./curiosities.js";
 import { createCuriosityDeck } from "./curiosities.js";
-import { loadProgress, saveProgress } from "./storage.js";
+import { clearAllPanalStorage } from "./storage.js";
 import { createBees } from "./bees.js";
 import { createJar } from "./jar.js";
 import { drawLangstrothFrame, frameInsets } from "./frame.js";
@@ -20,8 +20,14 @@ import { drawLangstrothFrame, frameInsets } from "./frame.js";
 const DESKTOP_COMB_W = 950;
 const DESKTOP_COMB_H = 450;
 
+// Wipe any leftover keys before anything else runs
+clearAllPanalStorage();
+
 export function mountPanal(root) {
   if (!root) return null;
+
+  // Always start clean — never restore
+  clearAllPanalStorage();
 
   const canvas = root.querySelector("[data-panal-canvas]");
   const jarCanvas = root.querySelector("[data-panal-jar]");
@@ -44,8 +50,6 @@ export function mountPanal(root) {
     index.set(keyOf(c.q, c.r), c);
   }
 
-  // Fresh each page load/open (no localStorage restore)
-  loadProgress();
   const filled = Object.create(null);
   let filledCount = 0;
   const deck = createCuriosityDeck(null);
@@ -62,17 +66,29 @@ export function mountPanal(root) {
   let cssW = 0;
   let cssH = 0;
 
-  // Offscreen comb layer — redraw only when cells/selection/layout change
   const combLayer = document.createElement("canvas");
   const combCtx = combLayer.getContext("2d", { alpha: false });
 
   const bees = createBees(3, map.cells, index, hexSize);
   const jar = jarCanvas ? createJar(jarCanvas) : null;
-  if (jar) jar.setFilledCount(Math.min(filledCount, JAR_GOAL));
 
-  function persist() {
-    // Intentionally empty — progress must not survive close/reload
-    saveProgress();
+  function resetHudToZero() {
+    filledCount = 0;
+    for (const k of Object.keys(filled)) delete filled[k];
+    selectedKey = null;
+    if (countEl) countEl.textContent = "0";
+    if (progressEl) {
+      progressEl.style.width = "0%";
+      progressEl.setAttribute("aria-valuenow", "0");
+    }
+    if (ctaWrap) ctaWrap.hidden = true;
+    if (cardEl) {
+      cardEl.hidden = true;
+      cardEl.classList.remove("is-visible");
+    }
+    if (cardText) cardText.textContent = "";
+    if (jar) jar.setFilledCount(0, true);
+    dirty = true;
   }
 
   function updateHud() {
@@ -83,7 +99,7 @@ export function mountPanal(root) {
       progressEl.setAttribute("aria-valuenow", String(shown));
     }
     if (ctaWrap) ctaWrap.hidden = shown < JAR_GOAL;
-    if (jar) jar.setFilledCount(shown);
+    if (jar) jar.setFilledCount(shown, shown === 0);
   }
 
   function showCuriosity(text) {
@@ -98,15 +114,10 @@ export function mountPanal(root) {
     const board = canvas.parentElement;
     const boardW = (board && board.clientWidth) || canvas.clientWidth || 320;
 
-    // Prefer ~950×450 comb on desktop; scale down on narrower boards.
     const unit = mapBounds(map.cols, map.rows, 1);
     let combW = Math.min(boardW * 0.98, DESKTOP_COMB_W);
     let combH = Math.min(DESKTOP_COMB_H, Math.round(combW / unit.aspect));
-    // Fit hex size into comb surface
-    hexSize = Math.max(
-      5.5,
-      Math.min(combW / unit.w, combH / unit.h)
-    );
+    hexSize = Math.max(5.5, Math.min(combW / unit.w, combH / unit.h));
     const real = mapBounds(map.cols, map.rows, hexSize);
     combW = real.w;
     combH = real.h;
@@ -115,7 +126,6 @@ export function mountPanal(root) {
     cssW = Math.ceil(combW + insets.side * 2);
     cssH = Math.ceil(combH + insets.top + insets.bottom);
 
-    // Cap total canvas to board width; recompute hex if needed
     if (cssW > boardW) {
       const scale = boardW / cssW;
       hexSize = Math.max(4.8, hexSize * scale);
@@ -137,7 +147,6 @@ export function mountPanal(root) {
     combLayer.height = Math.round(cssH * dpr);
     combCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Axial (0,0) sits at first cell center inside wax area
     originX = insets.side + hexSize * Math.sqrt(3) * 0.5;
     originY = insets.top + hexSize;
 
@@ -161,10 +170,7 @@ export function mountPanal(root) {
       g.addColorStop(1, PALETTE.deep);
       return g;
     }
-    if (state === CELL.selected) {
-      return PALETTE.deep;
-    }
-    // Empty wax cell with subtle checker + warm highlight
+    if (state === CELL.selected) return PALETTE.deep;
     const tone = ((q * 3 + r * 5) & 1) === 0 ? PALETTE.cream : PALETTE.soft;
     const g = combCtx.createRadialGradient(
       cx - hexSize * 0.25,
@@ -192,19 +198,19 @@ export function mountPanal(root) {
     target.closePath();
     target.fillStyle = cellFill(state, q, r, cx, cy);
     target.fill();
-
-    // Inner rim / wall thickness (worker-cell feel)
     target.strokeStyle =
       state === CELL.filled
         ? "rgba(112,66,15,0.45)"
         : state === CELL.selected
           ? PALETTE.brown
           : "rgba(169,104,25,0.32)";
-    target.lineWidth = state === CELL.selected ? Math.max(1.2, hexSize * 0.12) : Math.max(0.55, hexSize * 0.06);
+    target.lineWidth =
+      state === CELL.selected
+        ? Math.max(1.2, hexSize * 0.12)
+        : Math.max(0.55, hexSize * 0.06);
     target.stroke();
 
     if (state === CELL.empty) {
-      // Tiny specular glint
       target.fillStyle = "rgba(255,247,213,0.35)";
       target.beginPath();
       target.ellipse(
@@ -235,7 +241,6 @@ export function mountPanal(root) {
 
   function paintCombLayer() {
     drawLangstrothFrame(combCtx, cssW, cssH, insets);
-
     const now = performance.now();
     for (let i = 0; i < map.cells.length; i++) {
       const c = map.cells[i];
@@ -257,7 +262,6 @@ export function mountPanal(root) {
 
   function hitTest(clientX, clientY) {
     const rect = canvas.getBoundingClientRect();
-    // Map CSS pixels (handles letterboxing if any)
     const scaleX = cssW / rect.width;
     const scaleY = cssH / rect.height;
     const x = (clientX - rect.left) * scaleX - originX;
@@ -279,19 +283,16 @@ export function mountPanal(root) {
     selectUntil = performance.now() + (reducedMotion ? 80 : 220);
     dirty = true;
 
-    window.setTimeout(
-      function () {
-        if (filled[hit.key]) return;
-        filled[hit.key] = true;
-        filledCount++;
-        const reward = deck.next();
-        showCuriosity(reward.text);
-        updateHud();
-        persist();
-        dirty = true;
-      },
-      reducedMotion ? 60 : 180
-    );
+    window.setTimeout(function () {
+      if (filled[hit.key]) return;
+      filled[hit.key] = true;
+      filledCount++;
+      const reward = deck.next();
+      showCuriosity(reward.text);
+      updateHud();
+      clearAllPanalStorage(); // never leave keys behind
+      dirty = true;
+    }, reducedMotion ? 60 : 180);
   }
 
   function frame(ts) {
@@ -332,7 +333,17 @@ export function mountPanal(root) {
     redraw();
   });
 
-  updateHud();
+  // Back-forward cache can restore a full jar — force zero when page is shown again
+  window.addEventListener("pageshow", function (ev) {
+    clearAllPanalStorage();
+    if (ev.persisted) {
+      resetHudToZero();
+      resize();
+      redraw();
+    }
+  });
+
+  resetHudToZero();
   resize();
   redraw();
   requestAnimationFrame(function (ts) {
@@ -351,18 +362,18 @@ export function mountPanal(root) {
 }
 
 function boot() {
+  clearAllPanalStorage();
   const root = document.querySelector("[data-panal]");
   if (!root) return;
   const api = mountPanal(root);
-  if (api && typeof console !== "undefined" && console.debug) {
-    const g = api.getGrid();
-    console.debug(
-      "[panal] cells=",
+  if (api && typeof console !== "undefined" && console.info) {
+    console.info(
+      "[panal]",
+      PANAL_ASSET_V,
+      "cells=",
       api.getCellCount(),
-      "grid=",
-      g.cols + "x" + g.rows,
-      "hex=",
-      g.hexSize.toFixed(2)
+      "filled=",
+      api.getFilledCount()
     );
   }
 }

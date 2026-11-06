@@ -1,4 +1,4 @@
-/** Honeycomb palette — owner spec (no greens). */
+/** Honeycomb + wood palette — owner spec (no greens, no dark stage). */
 export const PALETTE = {
   creamLight: "#FFF7D5",
   cream: "#FFF0A8",
@@ -8,6 +8,13 @@ export const PALETTE = {
   deep: "#C58B29",
   brown: "#A96819",
   dark: "#70420F",
+  // Langstroth wood rails (warm honey-wood only)
+  woodLight: "#E8C07A",
+  woodMid: "#C9954A",
+  woodDeep: "#A56E28",
+  woodGrain: "#8B5A1F",
+  wax: "#FFE9A0",
+  waxDeep: "#F0D070",
 };
 
 export const CELL = {

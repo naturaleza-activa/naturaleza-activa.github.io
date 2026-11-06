@@ -81,11 +81,13 @@ export function createBees(count, cells, index, size) {
 
   function resize(newSize) {
     hexSize = newSize;
+    const scale = Math.max(0.9, Math.min(1.4, hexSize / 8));
     for (let i = 0; i < bees.length; i++) {
       const p = axialToPixel(bees[i].q, bees[i].r, hexSize);
       bees[i].x = bees[i].tx = bees[i].sx = p.x;
       bees[i].y = bees[i].ty = bees[i].sy = p.y;
       bees[i].t = 1;
+      bees[i]._scale = scale;
     }
   }
 
@@ -98,32 +100,34 @@ function easeInOut(t) {
 
 function drawBee(ctx, bee, ox, oy) {
   const x = ox + bee.x;
-  const y = oy + bee.y + Math.sin(bee.bob) * 1.5;
+  const y = oy + bee.y + Math.sin(bee.bob) * 1.8;
   const flap = 0.35 + Math.sin(bee.wing) * 0.35;
+  const s = Math.max(0.85, Math.min(1.35, (bee._scale || 1)));
   ctx.save();
   ctx.translate(x, y);
+  ctx.scale(s, s);
 
   ctx.globalAlpha = 0.55;
   ctx.fillStyle = PALETTE.creamLight;
   ctx.beginPath();
-  ctx.ellipse(-3, -4, 5, 2.2, -flap, 0, Math.PI * 2);
+  ctx.ellipse(-3.2, -4.2, 5.4, 2.4, -flap, 0, Math.PI * 2);
   ctx.fill();
   ctx.beginPath();
-  ctx.ellipse(3, -4, 5, 2.2, flap, 0, Math.PI * 2);
+  ctx.ellipse(3.2, -4.2, 5.4, 2.4, flap, 0, Math.PI * 2);
   ctx.fill();
   ctx.globalAlpha = 1;
 
   ctx.fillStyle = PALETTE.mid;
   ctx.beginPath();
-  ctx.ellipse(0, 0, 5.5, 3.6, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 0, 6, 3.9, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.fillStyle = PALETTE.dark;
-  ctx.fillRect(-2.2, -3.2, 1.4, 6.4);
-  ctx.fillRect(0.8, -3.2, 1.4, 6.4);
+  ctx.fillRect(-2.4, -3.4, 1.5, 6.8);
+  ctx.fillRect(0.9, -3.4, 1.5, 6.8);
 
   ctx.fillStyle = PALETTE.brown;
   ctx.beginPath();
-  ctx.arc(-5.5, 0, 2.4, 0, Math.PI * 2);
+  ctx.arc(-6, 0, 2.6, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.restore();

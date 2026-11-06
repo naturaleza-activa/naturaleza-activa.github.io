@@ -18,6 +18,7 @@
       <a class="site-header__brand" href="#inicio">Naturaleza Activa</a>
       <nav class="site-nav" aria-label="Principal">
         <a href="#historia">Historia</a>
+        <a href="#panal">Mundo de abejas</a>
         <a href="#productos">Productos</a>
         <a href="#promos">Promos</a>
         <a href="#envios">Envíos</a>
@@ -49,7 +50,58 @@
         <p class="hero__support">Cosecha natural del campo de Lobos: sin químicos ni conservantes, de la colmena a tu mesa.</p>
         <div class="hero__ctas">
           <a class="btn btn--solid" href="#productos">Ver presentaciones</a>
-          <a class="btn btn--ghost" href="#historia">Nuestra historia</a>
+          <a class="btn btn--ghost" href="#panal">Explorar el panal</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Panal interactivo (opcional): tienda con mundo de abejas — Canvas, sin imágenes externas -->
+    <section id="panal" class="section panal" aria-labelledby="panal-titulo" data-panal>
+      <div class="section__inner panal__inner">
+        <header class="section__header panal__header reveal">
+          <p class="eyebrow panal__eyebrow">Mundo de abejas</p>
+          <h2 id="panal-titulo">Antes de elegir tu miel, mirá adentro del panal</h2>
+          <p class="section__lede panal__lede">
+            Una portada viva de la colmena: tocá una celdilla y descubrí una curiosidad.
+            Es opcional — la tienda sigue abajo cuando quieras comprar.
+          </p>
+        </header>
+
+        <div class="panal__stage">
+          <div class="panal__board">
+            <canvas
+              class="panal__canvas"
+              data-panal-canvas
+              role="img"
+              aria-label="Panal interactivo con miles de celdillas. Tocá una vacía para llenarla de miel y leer una curiosidad."
+            ></canvas>
+            <p class="panal__hint">Tocá una celdilla vacía · ~2000 hexágonos en canvas</p>
+          </div>
+
+          <aside class="panal__side">
+            <div class="panal__jar-wrap">
+              <canvas class="panal__jar" data-panal-jar width="120" height="160" aria-hidden="true"></canvas>
+              <p class="panal__jar-label">Tarro de miel</p>
+              <div class="panal__meter" aria-label="Progreso del tarro">
+                <div class="panal__meter-fill" data-panal-progress style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0"></div>
+              </div>
+              <p class="panal__jar-count"><span data-panal-count>0</span> / 20 celdas</p>
+            </div>
+
+            <div class="panal__card" data-panal-card hidden>
+              <p class="panal__card-eyebrow">Curiosidad</p>
+              <p class="panal__card-text" data-panal-card-text></p>
+            </div>
+
+            <div class="panal__cta" data-panal-cta hidden>
+              <p class="panal__cta-copy">El tarro está lleno. Seguí a las presentaciones cuando quieras.</p>
+              <a class="btn btn--solid" href="#productos">Ver productos</a>
+            </div>
+
+            <button type="button" class="panal__skip" data-panal-skip>
+              Saltar y ver la tienda
+            </button>
+          </aside>
         </div>
       </div>
     </section>
@@ -383,5 +435,6 @@
 
   <script src="js/shipping-config.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script type="module" src="js/panal/main.js"></script>
 </body>
 </html>

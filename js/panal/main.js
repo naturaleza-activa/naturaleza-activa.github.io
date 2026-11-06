@@ -44,22 +44,11 @@ export function mountPanal(root) {
     index.set(keyOf(c.q, c.r), c);
   }
 
-  const saved = loadProgress();
+  // Fresh each page load/open (no localStorage restore)
+  loadProgress();
   const filled = Object.create(null);
   let filledCount = 0;
-  if (saved && saved.filled) {
-    Object.keys(saved.filled).forEach((k) => {
-      if (saved.filled[k] && index.has(k)) {
-        filled[k] = true;
-        filledCount++;
-      }
-    });
-  }
-
-  const deck = createCuriosityDeck(saved && saved.curiosityOrder);
-  if (saved && typeof saved.curiosityCursor === "number") {
-    deck.setCursor(saved.curiosityCursor);
-  }
+  const deck = createCuriosityDeck(null);
 
   let hexSize = 10;
   let originX = 0;
@@ -82,13 +71,8 @@ export function mountPanal(root) {
   if (jar) jar.setFilledCount(Math.min(filledCount, JAR_GOAL));
 
   function persist() {
-    const deckState = deck.getState();
-    saveProgress({
-      filled,
-      filledCount,
-      curiosityOrder: deckState.order,
-      curiosityCursor: deckState.cursor,
-    });
+    // Intentionally empty — progress must not survive close/reload
+    saveProgress();
   }
 
   function updateHud() {

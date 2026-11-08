@@ -23,6 +23,12 @@
   --space-4: 2.5rem;
   --space-5: 4rem;
   --space-6: 7rem;
+  --section-pad-y: clamp(3.25rem, 7vw, 5.5rem);
+  --section-h2: clamp(1.75rem, 3.4vw, 2.35rem);
+  --section-header-mb: clamp(1.5rem, 3vw, 2.25rem);
+  --wash-honey: rgba(239, 193, 90, 0.16);
+  --wash-honey-soft: rgba(247, 239, 216, 0.55);
+  --wash-field: rgba(220, 232, 212, 0.28);
   --max: 68rem;
   --header-h: 4rem;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -44,10 +50,12 @@ body {
   font-size: 1.05rem;
   line-height: 1.65;
   color: var(--ink);
+  /* Shared page rhythm — sections layer soft washes on top of this */
   background:
-    radial-gradient(120% 80% at 100% 0%, rgba(239, 193, 90, 0.18), transparent 55%),
-    radial-gradient(90% 60% at 0% 40%, rgba(61, 107, 69, 0.08), transparent 50%),
-    var(--paper);
+    radial-gradient(100% 70% at 100% -10%, rgba(239, 193, 90, 0.22), transparent 52%),
+    radial-gradient(80% 50% at 0% 35%, rgba(61, 107, 69, 0.07), transparent 48%),
+    radial-gradient(70% 40% at 80% 70%, rgba(239, 193, 90, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--paper-warm) 0%, var(--paper) 28%, var(--paper) 100%);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -235,6 +243,23 @@ p:last-child {
   overflow: hidden;
 }
 
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(28vh, 12rem);
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(255, 247, 213, 0.15) 45%,
+    rgba(255, 247, 213, 0.55) 100%
+  );
+}
+
 .hero__atmosphere {
   position: absolute;
   inset: 0;
@@ -334,9 +359,12 @@ p:last-child {
   }
 }
 
-/* —— Sections —— */
+/* —— Sections (shared rhythm) —— */
 .section {
-  padding: var(--space-6) 0;
+  position: relative;
+  padding: var(--section-pad-y) 0;
+  /* Soft seam into the next block — no hard divider lines */
+  box-shadow: inset 0 1px 0 rgba(154, 90, 18, 0.06);
 }
 
 .section__inner {
@@ -347,12 +375,22 @@ p:last-child {
 
 .section__header {
   max-width: 36rem;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--section-header-mb);
+}
+
+.section__header h2,
+.section h2 {
+  font-size: var(--section-h2);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--field);
+  margin: 0 0 0.65rem;
 }
 
 .section__lede {
   color: var(--ink-soft);
   margin: 0;
+  max-width: 44ch;
 }
 
 .eyebrow {
@@ -361,13 +399,13 @@ p:last-child {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--honey-deep);
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.55rem;
 }
 
 /* —— Story —— */
 .story {
   background:
-    linear-gradient(180deg, transparent, rgba(220, 232, 212, 0.45) 40%, transparent);
+    linear-gradient(180deg, transparent 0%, var(--wash-field) 42%, transparent 100%);
 }
 
 .story__grid {
@@ -384,7 +422,6 @@ p:last-child {
 }
 
 .story__copy h2 {
-  font-size: clamp(1.9rem, 4vw, 2.7rem);
   color: var(--field);
 }
 
@@ -413,7 +450,8 @@ p:last-child {
 
 /* —— Products (cards allowed: buy interaction) —— */
 .products {
-  background: var(--paper-warm);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255, 249, 236, 0.75) 18%, rgba(255, 249, 236, 0.9) 55%, transparent 100%);
 }
 
 .product-list {
@@ -500,8 +538,8 @@ p:last-child {
 /* —— Recetas: Con miel en casa —— */
 .recipes {
   background:
-    radial-gradient(80% 60% at 10% 0%, rgba(239, 193, 90, 0.2), transparent 55%),
-    linear-gradient(180deg, rgba(247, 239, 216, 0.45), transparent 70%);
+    radial-gradient(70% 55% at 12% 20%, var(--wash-honey), transparent 60%),
+    linear-gradient(180deg, transparent 0%, var(--wash-honey-soft) 45%, transparent 100%);
 }
 
 .recipes__list {
@@ -562,7 +600,7 @@ p:last-child {
 /* —— Promos —— */
 .promos {
   background:
-    linear-gradient(180deg, rgba(244, 232, 210, 0.55), transparent 60%);
+    linear-gradient(180deg, transparent 0%, rgba(244, 232, 210, 0.5) 35%, transparent 100%);
 }
 
 .promo-list {
@@ -636,7 +674,8 @@ p:last-child {
 /* —— Checkout (CP + total) —— */
 .checkout {
   background:
-    linear-gradient(180deg, rgba(220, 232, 212, 0.35), transparent 55%);
+    radial-gradient(90% 50% at 50% 0%, var(--wash-honey), transparent 55%),
+    linear-gradient(180deg, transparent 0%, var(--wash-field) 50%, transparent 100%);
 }
 
 .checkout__inner {
@@ -849,7 +888,6 @@ p:last-child {
 }
 
 .shipping__panel h2 {
-  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
   color: var(--field);
 }
 
@@ -860,10 +898,8 @@ p:last-child {
 
 /* —— Reviews (placeholders until real comments) —— */
 .reviews {
-  padding-top: var(--space-4);
-  padding-bottom: var(--space-4);
   background:
-    linear-gradient(180deg, transparent 0%, rgba(247, 239, 216, 0.55) 40%, transparent 100%);
+    linear-gradient(180deg, transparent 0%, var(--wash-honey-soft) 40%, transparent 100%);
 }
 
 .reviews .section__lede {
@@ -927,8 +963,10 @@ p:last-child {
 
 /* —— Contact (compact) —— */
 .contact {
-  padding-top: var(--space-3);
-  padding-bottom: var(--space-4);
+  padding-top: clamp(2rem, 4vw, 3rem);
+  padding-bottom: clamp(2.5rem, 5vw, 3.75rem);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(255, 249, 236, 0.5) 60%, transparent 100%);
 }
 
 .contact__inner {
@@ -952,7 +990,7 @@ p:last-child {
 
 .contact__inner h2 {
   margin: 0;
-  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
   color: var(--field);
 }
 
@@ -1028,9 +1066,17 @@ p:last-child {
   --panal-deep: #c58b29;
   --panal-brown: #a96819;
   --panal-dark: #70420f;
+  /* Fade into page rhythm top/bottom — less of a hard yellow slab */
   background:
-    radial-gradient(90% 70% at 80% 0%, rgba(245, 206, 101, 0.35), transparent 55%),
-    linear-gradient(180deg, #fff7d5 0%, #fff0a8 48%, #ffe69a 100%);
+    radial-gradient(90% 70% at 80% 15%, rgba(245, 206, 101, 0.32), transparent 58%),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      #fff7d5 12%,
+      #fff0a8 48%,
+      #ffe69a 82%,
+      transparent 100%
+    );
   color: var(--panal-dark);
 }
 
@@ -1041,6 +1087,7 @@ p:last-child {
 
 .panal h2,
 .panal__header h2 {
+  font-size: var(--section-h2);
   color: var(--panal-dark);
 }
 

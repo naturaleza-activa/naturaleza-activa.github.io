@@ -50,6 +50,7 @@
     if (weightKg <= 1) return "1";
     if (weightKg <= 2) return "2";
     if (weightKg <= 3) return "3";
+    if (weightKg <= 5) return "5";
     return "10";
   }
 

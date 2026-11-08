@@ -17,8 +17,8 @@ import { createJar } from "./jar.js";
 import { drawLangstrothFrame, frameInsets } from "./frame.js";
 
 /** Desktop target for the comb (wax) surface inside the wooden frame. */
-const DESKTOP_COMB_W = 950;
-const DESKTOP_COMB_H = 450;
+const DESKTOP_COMB_W = 1040;
+const DESKTOP_COMB_H = 490;
 
 // Wipe any leftover keys before anything else runs
 clearAllPanalStorage();
@@ -69,7 +69,7 @@ export function mountPanal(root) {
   const combLayer = document.createElement("canvas");
   const combCtx = combLayer.getContext("2d", { alpha: false });
 
-  const bees = createBees(3, map.cells, index, hexSize);
+  const bees = createBees(7, map.cells, index, hexSize);
   const jar = jarCanvas ? createJar(jarCanvas) : null;
 
   function resetHudToZero() {
@@ -190,7 +190,7 @@ export function mountPanal(root) {
     const p = axialToPixel(q, r, hexSize);
     const cx = originX + p.x;
     const cy = originY + p.y;
-    const rad = hexSize * 0.94;
+    const rad = hexSize * 0.98;
     const pts = hexCorners(cx, cy, rad);
     target.beginPath();
     target.moveTo(pts[0].x, pts[0].y);

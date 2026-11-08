@@ -2,11 +2,11 @@ import { PALETTE } from "./palette.js";
 import { axialToPixel, neighborsOf } from "./hex.js";
 
 /**
- * 2–3 code-drawn bees that walk between hex centers.
+ * Code-drawn bees that walk between hex centers (~6–8 on the comb).
  */
 export function createBees(count, cells, index, size) {
   let hexSize = size;
-  const n = Math.max(2, Math.min(3, count | 0));
+  const n = Math.max(2, Math.min(8, count | 0));
   const bees = [];
 
   for (let i = 0; i < n; i++) {

@@ -27,4 +27,4 @@ export const JAR_GOAL = 20;
 /** Legacy key name only — progress is never persisted. */
 export const STORAGE_KEY = "na-panal-v1";
 /** Bump to force browsers to refetch ES modules after Pages deploys. */
-export const PANAL_ASSET_V = "20261106-reset3";
+export const PANAL_ASSET_V = "20261108-bees7";

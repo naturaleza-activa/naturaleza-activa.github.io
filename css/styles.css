@@ -796,37 +796,115 @@ p:last-child {
   max-width: 46ch;
 }
 
-/* —— Contact —— */
+/* —— Reviews (placeholders until real comments) —— */
+.reviews {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(247, 239, 216, 0.55) 40%, transparent 100%);
+}
+
+.reviews .section__lede {
+  max-width: 42ch;
+}
+
+.reviews__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 720px) {
+  .reviews__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.75rem;
+  }
+}
+
+.review {
+  margin: 0;
+  padding: 0 0 0 1rem;
+  border-left: 3px solid var(--honey);
+  background: transparent;
+}
+
+.review__quote {
+  margin: 0;
+}
+
+.review__quote p {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.review__meta {
+  margin: 0.85rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.review__name {
+  font-weight: 600;
+  color: var(--honey-deep);
+}
+
+.review__tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+/* —— Contact (compact) —— */
 .contact {
-  padding-bottom: var(--space-6);
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-4);
 }
 
 .contact__inner {
-  max-width: 36rem;
+  max-width: var(--max);
+}
+
+.contact__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.contact__copy .eyebrow {
+  margin-bottom: 0.15rem;
 }
 
 .contact__inner h2 {
-  font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+  margin: 0;
+  font-size: clamp(1.25rem, 2.4vw, 1.55rem);
   color: var(--field);
-}
-
-.contact__inner > p {
-  color: var(--ink-soft);
 }
 
 .contact__mail {
   display: inline-flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.65rem;
-  margin-top: 0.5rem;
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
   font-weight: 650;
   color: var(--honey-deep);
   text-decoration: none;
   border-bottom: 1.5px solid rgba(154, 90, 18, 0.35);
-  padding-bottom: 0.15rem;
+  padding-bottom: 0.1rem;
 }
 
 .contact__mail:hover {

@@ -13,7 +13,7 @@ window.NA_CONFIG = {
    * MP_WORKER_URL: URL del Worker desplegado (…workers.dev). Vacío = pago aún no listo.
    */
   MP_CHECKOUT_READY: true,
-  MP_WORKER_URL: "https://naturaleza-activa-checkout.waiting-sugar.workers.dev",
+  MP_WORKER_URL: "https://naturaleza-activa-checkout.legend-move.workers.dev",
 
   PRODUCTS: {
     "medio-kilo": {

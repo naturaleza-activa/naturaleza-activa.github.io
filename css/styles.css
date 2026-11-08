@@ -497,6 +497,68 @@ p:last-child {
   flex: 1;
 }
 
+/* —— Recetas: Con miel en casa —— */
+.recipes {
+  background:
+    radial-gradient(80% 60% at 10% 0%, rgba(239, 193, 90, 0.2), transparent 55%),
+    linear-gradient(180deg, rgba(247, 239, 216, 0.45), transparent 70%);
+}
+
+.recipes__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 720px) {
+  .recipes__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+.recipe {
+  margin: 0;
+  padding: 1.15rem 1.15rem 1.25rem;
+  border-top: 3px solid var(--honey);
+  background: rgba(255, 249, 236, 0.72);
+}
+
+.recipe__kind {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--honey-deep);
+}
+
+.recipe__name {
+  margin: 0 0 0.85rem;
+  font-size: clamp(1.15rem, 2vw, 1.35rem);
+  color: var(--field);
+  line-height: 1.25;
+}
+
+.recipe__steps {
+  margin: 0;
+  padding: 0 0 0 1.15rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.recipe__steps li + li {
+  margin-top: 0.4rem;
+}
+
+.recipes__cta {
+  margin: 1.75rem 0 0;
+  text-align: center;
+}
+
 /* —— Promos —— */
 .promos {
   background:

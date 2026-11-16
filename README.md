@@ -6,7 +6,9 @@ Sitio de una sola página para la miel artesanal de Lobos. Abrí `index.html` en
 
 ## Cotizador de envío (CP)
 
-Flujo: elegir presentación → ingresar CP destino → ver zona, envío más económico y **total = producto + envío**.
+Flujo: armar carrito (varias presentaciones) → ingresar CP destino → ver zona, **un solo envío** por peso total y **total = productos + envío** → un formulario → un pago Checkout Pro.
+
+**Regla Pack 3 kg:** la bonificación de envío (hasta $6.500 × cantidad) aplica **solo si el carrito tiene únicamente ese pack**. En carritos mixtos se cotiza el peso total sin esa bonificación.
 
 ### Configuración (un solo archivo)
 

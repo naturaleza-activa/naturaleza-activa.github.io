@@ -1,0 +1,13 @@
+name = "naturaleza-activa-checkout"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# Secrets (never commit):
+#   npx wrangler secret put MP_ACCESS_TOKEN
+#   npx wrangler secret put RESEND_API_KEY   # optional — enables email of shipping labels
+
+[vars]
+SITE_ORIGIN = "https://naturaleza-activa.github.io"
+BACK_URL = "https://naturaleza-activa.github.io/"
+LABEL_TO_EMAIL = "contactonaturalezaactiva@gmail.com"
+RESEND_FROM = "Naturaleza Activa <onboarding@resend.dev>"

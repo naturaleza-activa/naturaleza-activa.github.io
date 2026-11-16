@@ -60,7 +60,10 @@ window.NA_CONFIG = {
       price: 31900,
       perKg: 10633,
       promo: true,
-      /* Bonifica hasta $6.500 de envío (sujeto a zona). */
+      /**
+       * Bonifica hasta $6.500 de envío × cantidad, SOLO si el carrito
+       * tiene únicamente este pack. En carritos mixtos no aplica.
+       */
       freeShippingUpTo: 6500
     }
   },

@@ -139,7 +139,7 @@
         <header class="section__header reveal">
           <p class="eyebrow">Presentaciones</p>
           <h2 id="productos-titulo">Miel para tu casa</h2>
-          <p class="section__lede">Elegí el tamaño, cotizá el envío con tu código postal y pagá el total.</p>
+          <p class="section__lede">Armá tu pedido con varias presentaciones, cotizá un solo envío y pagá todo junto.</p>
         </header>
 
         <ul class="product-list">
@@ -249,7 +249,7 @@
         <header class="section__header reveal">
           <p class="eyebrow">Promociones</p>
           <h2 id="promos-titulo">Combos para llevar más</h2>
-          <p class="section__lede">Mejor precio por kilo. El envío se cotiza con tu CP (salvo el pack con envío bonificado).</p>
+          <p class="section__lede">Mejor precio por kilo. Podés combinarlas en el carrito; el envío se cotiza una sola vez por CP.</p>
         </header>
 
         <ul class="promo-list">
@@ -283,18 +283,27 @@
       <div class="section__inner checkout__inner reveal">
         <header class="section__header">
           <p class="eyebrow">Compra</p>
-          <h2 id="compra-titulo">Cotizá el envío y pagá</h2>
+          <h2 id="compra-titulo">Armá tu pedido y pagá una sola vez</h2>
           <p class="section__lede">
-            Ingresá el código postal de destino. Calculamos la opción más económica según zona y tamaño del paquete.
+            Sumá presentaciones al carrito, cotizá un solo envío con tu CP y completá los datos una vez.
             Origen: CP <span data-origin-cp>7240</span> · Lobos (B7240).
           </p>
         </header>
 
-        <form class="checkout__form" data-checkout-form>
-          <div class="checkout__fields">
-            <label class="field">
-              <span class="field__label">Presentación</span>
-              <select name="product" required>
+        <div class="cart" data-cart>
+          <div class="cart__head">
+            <p class="cart__title">Tu carrito</p>
+            <p class="cart__hint" data-cart-empty>
+              Todavía vacío. Tocá “Comprar” en un producto o sumá cantidad acá abajo.
+            </p>
+          </div>
+
+          <ul class="cart__lines" data-cart-lines aria-live="polite"></ul>
+
+          <div class="cart__add">
+            <label class="field cart__add-product">
+              <span class="field__label">Agregar presentación</span>
+              <select data-cart-add-product>
                 <option value="medio-kilo">½ kilo — $5.000</option>
                 <option value="kilo" selected>1 kilo — $9.500</option>
                 <option value="balde">Balde 10 kg — $65.000</option>
@@ -303,6 +312,17 @@
                 <option value="pack-3kg-envio">Pack 3 kg envío gratis — $31.900</option>
               </select>
             </label>
+            <button type="button" class="btn btn--solid" data-cart-add>Agregar</button>
+          </div>
+
+          <p class="cart__subtotal" data-cart-subtotal hidden>
+            Subtotal productos: <strong data-cart-subtotal-value></strong>
+            <span class="cart__weight"> · <span data-cart-weight></span> kg</span>
+          </p>
+        </div>
+
+        <form class="checkout__form" data-checkout-form>
+          <div class="checkout__fields checkout__fields--cp">
             <label class="field">
               <span class="field__label">Código postal destino</span>
               <input
@@ -316,20 +336,25 @@
                 required
               >
             </label>
-            <button type="submit" class="btn btn--solid checkout__calc">Calcular envío</button>
+            <button type="submit" class="btn btn--solid checkout__calc">Calcular envío del pedido</button>
           </div>
+          <p class="checkout__ship-rule">
+            El Pack 3 kg bonifica hasta $6.500 de envío <strong>solo si el carrito tiene únicamente ese pack</strong>.
+            Si mezclás con otras presentaciones, cotizamos el envío por el peso total sin esa bonificación.
+          </p>
           <p class="checkout__error" data-checkout-error hidden></p>
         </form>
 
         <div class="checkout__result" data-checkout-result hidden>
+          <ul class="quote-lines" data-q-lines></ul>
           <dl class="quote">
             <div class="quote__row">
-              <dt>Producto</dt>
-              <dd><span data-q-product></span> · <span data-q-product-price></span></dd>
+              <dt>Subtotal productos</dt>
+              <dd data-q-products></dd>
             </div>
             <div class="quote__row">
               <dt>Destino</dt>
-              <dd>CP <span data-q-cp></span> · <span data-q-zone></span></dd>
+              <dd>CP <span data-q-cp></span> · <span data-q-zone></span> · <span data-q-weight></span> kg</dd>
             </div>
             <div class="quote__row">
               <dt>Envío (más económico)</dt>
@@ -340,6 +365,7 @@
               <dd data-q-total></dd>
             </div>
           </dl>
+          <p class="quote__note" data-q-ship-note hidden></p>
 
           <form
             class="checkout__address"
@@ -350,9 +376,10 @@
           >
             <p class="checkout__address-title">Datos de envío</p>
             <p class="checkout__address-lede">
-              Los necesitamos para despachar. Van a la preferencia de Mercado Pago.
+              Un solo formulario para todo el pedido. Van a la preferencia de Mercado Pago.
             </p>
             <input type="hidden" name="productId" value="">
+            <input type="hidden" name="cart" value="">
             <input type="hidden" name="shipping" value="">
             <input type="hidden" name="total" value="">
             <input type="hidden" name="zone" value="">
@@ -436,7 +463,7 @@
           <div id="compra-pago" class="checkout__next" hidden>
             <p class="checkout__next-title">Siguiente paso</p>
             <p>
-              Completá los datos de envío y pagá. El total incluye producto + envío.
+              Completá los datos de envío y pagá. El total incluye productos + envío.
               Si el pago no abre, escribinos a
               <a href="mailto:contactonaturalezaactiva@gmail.com">contactonaturalezaactiva@gmail.com</a>.
             </p>
@@ -451,11 +478,12 @@
         <h2 id="envios-titulo">A todo el país, al mejor precio práctico</h2>
         <p>
           Cotizás con tu código postal: usamos zonas (CABA, GBA/AMBA, Interior, Patagonia/Sur)
-          y el tamaño del paquete (½ kg, 1 kg o balde 10 kg) para estimar la opción más económica.
-          El total de la compra es <strong>producto + envío</strong>.
+          y el <strong>peso total del carrito</strong> para estimar la opción más económica.
+          Un pedido = un envío. El total de la compra es <strong>productos + envío</strong>.
         </p>
         <p>
-          Origen del cotizador: CP <span data-origin-cp>7240</span> · Lobos (B7240).
+          Pack 3 kg: bonificación de envío solo si el carrito tiene únicamente ese pack.
+          Origen: CP <span data-origin-cp>7240</span> · Lobos (B7240).
         </p>
       </div>
     </section>

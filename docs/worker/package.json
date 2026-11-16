@@ -1,0 +1,14 @@
+{
+  "name": "naturaleza-activa-checkout",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Cloudflare Worker — Mercado Pago Checkout Pro preferences for Naturaleza Activa",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "secret:mp": "wrangler secret put MP_ACCESS_TOKEN"
+  },
+  "devDependencies": {
+    "wrangler": "^4.156.2"
+  }
+}

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261108-flow">
+  <link rel="stylesheet" href="css/styles.css?v=20261122-hives">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -33,14 +33,17 @@
     <!-- HERO: una sola composición — marca dominante, un titular, un apoyo, un grupo CTA -->
     <section id="inicio" class="hero" aria-labelledby="marca">
       <div class="hero__atmosphere" aria-hidden="true">
-        <img
-          class="hero__photo"
-          src="assets/placeholders/hero.svg"
-          alt=""
-          width="1600"
-          height="1000"
-          fetchpriority="high"
-        >
+        <picture>
+          <source type="image/webp" srcset="assets/photos/hero-apiario.webp">
+          <img
+            class="hero__photo"
+            src="assets/photos/hero-apiario.jpg"
+            alt=""
+            width="1600"
+            height="1000"
+            fetchpriority="high"
+          >
+        </picture>
         <div class="hero__wash"></div>
         <div class="hero__grain"></div>
       </div>
@@ -122,14 +125,17 @@
           </p>
         </div>
         <figure class="story__media reveal">
-          <img
-            src="assets/placeholders/colmenas.svg"
-            alt="Placeholder: colmenas de Naturaleza Activa en el campo de Lobos"
-            width="900"
-            height="560"
-            loading="lazy"
-          >
-          <figcaption>Reemplazá esta imagen con una foto real de tus colmenas.</figcaption>
+          <picture>
+            <source type="image/webp" srcset="assets/photos/colmenas-fila.webp">
+            <img
+              src="assets/photos/colmenas-fila.jpg"
+              alt="Fila de colmenas de madera en el apiario de Naturaleza Activa, Lobos, rodeadas de pasto alto"
+              width="1200"
+              height="750"
+              loading="lazy"
+            >
+          </picture>
+          <figcaption>Colmenas en el campo de Lobos — de acá sale la miel.</figcaption>
         </figure>
       </div>
     </section>

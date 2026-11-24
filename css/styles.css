@@ -900,6 +900,36 @@ p:last-child {
   font-size: 0.92rem;
 }
 
+.checkout__return {
+  margin-bottom: var(--space-3);
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--honey);
+  background: var(--paper-warm);
+}
+
+.checkout__return--success {
+  border-left-color: var(--field-mid);
+  background: var(--field-soft);
+}
+
+.checkout__return--failure {
+  border-left-color: #8a2f1a;
+}
+
+.checkout__return-title {
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.checkout__return-text {
+  margin-top: 0.35rem;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+
 .checkout__result {
   margin-top: var(--space-3);
   padding: 1.25rem 1.2rem 1.35rem;

@@ -487,6 +487,43 @@
     /* Native form POST → Worker → 302 Mercado Pago */
   }
 
+  /* Vuelta desde Mercado Pago: ?payment=success|pending|failure */
+  (function showPaymentReturn() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var status = params.get("payment");
+      var box = document.querySelector("[data-payment-return]");
+      if (!status || !box) return;
+      var mp = params.get("status") || params.get("collection_status");
+      if (status === "success" && mp && mp !== "approved") status = mp === "in_process" ? "pending" : "failure";
+      var copy = {
+        success: [
+          "¡Gracias por tu compra!",
+          "Tu pago fue aprobado. Te escribimos al mail que dejaste para coordinar el envío. Cualquier duda: " + cfg.CONTACT_EMAIL + "."
+        ],
+        pending: [
+          "Tu pago está pendiente",
+          "Mercado Pago todavía está procesando el pago. Apenas se acredite te escribimos para coordinar el envío."
+        ],
+        failure: [
+          "No se completó el pago",
+          "El pago no se realizó y no se te cobró. Podés volver a intentarlo o escribirnos a " + cfg.CONTACT_EMAIL + "."
+        ]
+      };
+      var c = copy[status];
+      if (!c) return;
+      box.className = "checkout__return checkout__return--" + status;
+      box.querySelector("[data-payment-return-title]").textContent = c[0];
+      box.querySelector("[data-payment-return-text]").textContent = c[1];
+      box.hidden = false;
+      var target = document.getElementById("compra");
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, "", window.location.pathname + "#compra");
+      }
+    } catch (_) {}
+  })();
+
   /* Show Worker/checkout errors returned via ?checkout_error=…#compra */
   (function showCheckoutError() {
     try {

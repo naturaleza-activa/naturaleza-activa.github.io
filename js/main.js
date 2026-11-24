@@ -11,8 +11,37 @@
     header.classList.toggle("is-scrolled", window.scrollY > 24);
   }
 
+  function syncHeaderHeight() {
+    if (!header) return;
+    var h = header.offsetHeight;
+    if (h > 0) {
+      document.documentElement.style.setProperty("--header-total", h + "px");
+    }
+  }
+
+  (function syncPromoStrip() {
+    var strip = document.querySelector("[data-bf-strip]");
+    if (!strip) return;
+    var promo = cfg.PROMO_CAMPAIGN;
+    if (!promo || !promo.active) {
+      strip.hidden = true;
+      return;
+    }
+    strip.hidden = false;
+    var pill = strip.querySelector("[data-bf-pill]");
+    var copy = strip.querySelector("[data-bf-copy]");
+    if (pill && promo.untilLabel) {
+      pill.textContent = (promo.name || "Black Friday") + " · Hasta el " + promo.untilLabel;
+    }
+    if (copy && promo.copy) {
+      copy.textContent = promo.copy;
+    }
+  })();
+
   onScroll();
+  syncHeaderHeight();
   window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", syncHeaderHeight, { passive: true });
 
   if (!reduceMotion && "IntersectionObserver" in window) {
     var observer = new IntersectionObserver(
@@ -90,11 +119,15 @@
       if (qty <= 0) return;
       var product = products[id];
       if (!product) return;
+      var regularUnit =
+        typeof product.regularPrice === "number" ? product.regularPrice : product.price;
       lines.push({
         id: id,
         product: product,
         qty: qty,
         linePrice: product.price * qty,
+        lineRegularPrice: regularUnit * qty,
+        lineSavings: Math.max(0, (regularUnit - product.price) * qty),
         lineWeight: product.weightKg * qty
       });
     });
@@ -103,11 +136,15 @@
 
   function cartTotals(lines) {
     var subtotal = 0;
+    var regularSubtotal = 0;
+    var promoSavings = 0;
     var weightKg = 0;
     var onlyFreePack = lines.length > 0;
     var freePackQty = 0;
     lines.forEach(function (line) {
       subtotal += line.linePrice;
+      regularSubtotal += line.lineRegularPrice;
+      promoSavings += line.lineSavings;
       weightKg += line.lineWeight;
       if (line.id !== FREE_SHIP_PACK_ID) onlyFreePack = false;
       else freePackQty += line.qty;
@@ -115,6 +152,8 @@
     if (!lines.length) onlyFreePack = false;
     return {
       subtotal: subtotal,
+      regularSubtotal: regularSubtotal,
+      promoSavings: promoSavings,
       weightKg: weightKg,
       onlyFreePack: onlyFreePack,
       freePackQty: freePackQty
@@ -166,6 +205,8 @@
       zone: zone,
       weightKg: totals.weightKg,
       productsSubtotal: totals.subtotal,
+      regularSubtotal: totals.regularSubtotal,
+      promoSavings: totals.promoSavings,
       shipping: shipping,
       rawShipping: rawShipping,
       freeShipping: freeShipping,
@@ -201,9 +242,28 @@
   var cartSubtotalEl = document.querySelector("[data-cart-subtotal]");
   var cartSubtotalValueEl = document.querySelector("[data-cart-subtotal-value]");
   var cartWeightEl = document.querySelector("[data-cart-weight]");
+  var cartSavingsEl = document.querySelector("[data-cart-savings]");
   var cartAddSelect = document.querySelector("[data-cart-add-product]");
   var cartAddBtn = document.querySelector("[data-cart-add]");
   var lastQuote = null;
+
+  (function syncCartSelectOptions() {
+    if (!cartAddSelect || !cfg.PRODUCTS) return;
+    Array.prototype.forEach.call(cartAddSelect.options, function (opt) {
+      var prod = cfg.PRODUCTS[opt.value];
+      if (!prod) return;
+      var label = (prod.selectLabel || prod.name) + " — " + formatArs(prod.price);
+      if (prod.onSale && prod.regularPrice > prod.price) {
+        label +=
+          " (antes " +
+          formatArs(prod.regularPrice) +
+          " · " +
+          (prod.saleLabel || "Black Friday") +
+          ")";
+      }
+      opt.textContent = label;
+    });
+  })();
 
   originEl.forEach(function (el) {
     el.textContent = cfg.ORIGIN_CP || "XXXX";
@@ -242,6 +302,15 @@
     if (cartSubtotalEl) cartSubtotalEl.hidden = lines.length === 0;
     if (cartSubtotalValueEl) cartSubtotalValueEl.textContent = formatArs(totals.subtotal);
     if (cartWeightEl) cartWeightEl.textContent = formatWeight(totals.weightKg);
+    if (cartSavingsEl) {
+      if (totals.promoSavings > 0) {
+        cartSavingsEl.hidden = false;
+        cartSavingsEl.textContent = "· ahorrás " + formatArs(totals.promoSavings) + " en Black Friday";
+      } else {
+        cartSavingsEl.hidden = true;
+        cartSavingsEl.textContent = "";
+      }
+    }
 
     if (!cartLinesEl) return;
     cartLinesEl.innerHTML = "";
@@ -257,15 +326,30 @@
       var name = document.createElement("div");
       name.className = "cart__line-name";
       name.textContent = line.product.name;
+      if (line.product.onSale && line.product.regularPrice > line.product.price) {
+        var tag = document.createElement("span");
+        tag.className = "bf-tag";
+        tag.textContent = line.product.saleLabel || "Black Friday";
+        name.appendChild(tag);
+      }
 
       var meta = document.createElement("div");
       meta.className = "cart__line-meta";
-      meta.textContent =
-        formatArs(line.product.price) +
-        " c/u · " +
-        formatWeight(line.lineWeight) +
-        " kg · " +
-        formatArs(line.linePrice);
+      if (line.product.onSale && line.product.regularPrice > line.product.price) {
+        var oldUnit = document.createElement("del");
+        oldUnit.className = "price-old";
+        oldUnit.textContent = formatArs(line.product.regularPrice);
+        meta.appendChild(oldUnit);
+      }
+      meta.appendChild(
+        document.createTextNode(
+          formatArs(line.product.price) +
+            " c/u · " +
+            formatWeight(line.lineWeight) +
+            " kg · " +
+            formatArs(line.linePrice)
+        )
+      );
 
       info.appendChild(name);
       info.appendChild(meta);
@@ -328,17 +412,37 @@
       q.lines.forEach(function (line) {
         var li = document.createElement("li");
         li.className = "quote-lines__item";
-        li.textContent =
-          line.qty +
-          " × " +
-          line.product.name +
-          " — " +
-          formatArs(line.linePrice);
+        li.appendChild(document.createTextNode(line.qty + " × " + line.product.name));
+        if (line.product.onSale && line.lineRegularPrice > line.linePrice) {
+          var bfTag = document.createElement("span");
+          bfTag.className = "bf-tag";
+          bfTag.textContent = line.product.saleLabel || "Black Friday";
+          li.appendChild(bfTag);
+          li.appendChild(document.createTextNode(" — "));
+          var oldLine = document.createElement("del");
+          oldLine.className = "price-old";
+          oldLine.textContent = formatArs(line.lineRegularPrice);
+          li.appendChild(oldLine);
+          li.appendChild(document.createTextNode(formatArs(line.linePrice)));
+        } else {
+          li.appendChild(document.createTextNode(" — " + formatArs(line.linePrice)));
+        }
         linesEl.appendChild(li);
       });
     }
 
     resultEl.querySelector("[data-q-products]").textContent = formatArs(q.productsSubtotal);
+    var savingsRow = resultEl.querySelector("[data-q-savings-row]");
+    var savingsVal = resultEl.querySelector("[data-q-savings]");
+    if (savingsRow && savingsVal) {
+      if (q.promoSavings > 0) {
+        savingsRow.hidden = false;
+        savingsVal.textContent = formatArs(q.promoSavings) + " (ya aplicado)";
+      } else {
+        savingsRow.hidden = true;
+        savingsVal.textContent = "";
+      }
+    }
     resultEl.querySelector("[data-q-zone]").textContent = q.zone.label;
     resultEl.querySelector("[data-q-cp]").textContent = q.cp;
     resultEl.querySelector("[data-q-weight]").textContent = formatWeight(q.weightKg);

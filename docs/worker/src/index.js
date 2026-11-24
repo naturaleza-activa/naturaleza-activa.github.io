@@ -7,10 +7,28 @@
  * GET  /health
  *
  * Secrets: MP_ACCESS_TOKEN (required), RESEND_API_KEY (optional)
- * Vars: SITE_ORIGIN, BACK_URL, LABEL_TO_EMAIL, RESEND_FROM
+ * Vars (opcionales; el código ya trae defaults): SITE_ORIGIN, BACK_URL, LABEL_TO_EMAIL, RESEND_FROM
+ *
+ * Archivo 100% standalone (sin imports): se puede pegar entero en Cloudflare → Edit code.
  */
 
-const PRODUCTS = {
+/**
+ * Campaña Black Friday (mantener sincronizado con js/shipping-config.js).
+ * - Para extender al 29/11: cambiar `untilDate` a "2026-11-29".
+ * - Para volver a precios regulares: cambiar `active` a `false`.
+ */
+const BLACK_FRIDAY = {
+  active: true,
+  untilDate: "2026-11-27",
+  prices: {
+    balde: 59000,
+    "combo-familiar": 16500,
+    "combo-5kg": 37900,
+    "pack-3kg-envio": 28900,
+  },
+};
+
+const REGULAR_PRODUCTS = {
   "medio-kilo": {
     id: "medio-kilo",
     title: "Miel Naturaleza Activa — ½ kilo",
@@ -49,6 +67,18 @@ const PRODUCTS = {
     freeShippingUpTo: 6500,
   },
 };
+
+const PRODUCTS = Object.fromEntries(
+  Object.entries(REGULAR_PRODUCTS).map(([id, product]) => {
+    const promoPrice = BLACK_FRIDAY.active ? BLACK_FRIDAY.prices[id] : null;
+    return [
+      id,
+      typeof promoPrice === "number"
+        ? { ...product, regularPrice: product.price, price: promoPrice }
+        : { ...product },
+    ];
+  })
+);
 
 const FREE_SHIP_PACK_ID = "pack-3kg-envio";
 
@@ -362,6 +392,16 @@ function publicBase(request, env) {
   return `${u.protocol}//${u.host}`;
 }
 
+function backWithStatus(backUrl, status) {
+  try {
+    const u = new URL(backUrl);
+    u.searchParams.set("payment", status);
+    return u.toString();
+  } catch {
+    return backUrl;
+  }
+}
+
 async function createPreference(env, lines, shipping, weightKg, addr, workerBase) {
   const backUrl = env.BACK_URL || "https://naturaleza-activa.github.io/";
   const { street_name, street_number } = parseStreet(addr.street);
@@ -434,9 +474,9 @@ async function createPreference(env, lines, shipping, weightKg, addr, workerBase
     additional_info: desc.slice(0, 600),
     notification_url: `${workerBase}/mp-webhook`,
     back_urls: {
-      success: backUrl,
-      failure: backUrl,
-      pending: backUrl,
+      success: backWithStatus(backUrl, "success"),
+      failure: backWithStatus(backUrl, "failure"),
+      pending: backWithStatus(backUrl, "pending"),
     },
     auto_return: "approved",
     statement_descriptor: "NATURALEZA ACTIVA",
@@ -945,9 +985,17 @@ export default {
             checkout: true,
             webhook: true,
             label: true,
+            multiItemCart: true,
             resend: Boolean(env.RESEND_API_KEY),
             mpToken: hasMpAccessToken(env),
           },
+          mpToken: hasMpAccessToken(env),
+          resend: Boolean(env.RESEND_API_KEY),
+          multiItemCart: true,
+          promo: BLACK_FRIDAY.active
+            ? { name: "black-friday", untilDate: BLACK_FRIDAY.untilDate }
+            : null,
+          version: "2026-11-24-bf",
           workersDevHint: new URL(request.url).host,
         },
         200,

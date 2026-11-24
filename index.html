@@ -10,24 +10,35 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,700&family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=20261124-return">
+  <link rel="stylesheet" href="css/styles.css?v=20261124-bf">
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
   <header class="site-header" data-header>
-    <div class="site-header__inner">
-      <a class="site-header__brand" href="#inicio">Naturaleza Activa</a>
-      <nav class="site-nav" aria-label="Principal">
-        <a href="#historia">Historia</a>
-        <a href="#panal">Mundo de abejas</a>
-        <a href="#productos">Productos</a>
-        <a href="#recetas">Recetas</a>
-        <a href="#promos">Promos</a>
-        <a href="#envios">Envíos</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
-      <a class="btn btn--small btn--solid" href="#productos">Comprar</a>
+    <div class="bf-strip" data-bf-strip role="region" aria-label="Ofertas Black Friday">
+      <div class="bf-strip__inner">
+        <span class="bf-strip__pill" data-bf-pill>Black Friday · Hasta el 27/11</span>
+        <span class="bf-strip__text">
+          <span class="bf-strip__copy" data-bf-copy>Ofertas en combos y balde</span>
+          <a class="bf-strip__link" href="#promos" data-bf-cta>Ver ofertas <span aria-hidden="true">→</span></a>
+        </span>
+      </div>
+    </div>
+    <div class="site-header__bar">
+      <div class="site-header__inner">
+        <a class="site-header__brand" href="#inicio">Naturaleza Activa</a>
+        <nav class="site-nav" aria-label="Principal">
+          <a href="#historia">Historia</a>
+          <a href="#panal">Mundo de abejas</a>
+          <a href="#productos">Productos</a>
+          <a href="#recetas">Recetas</a>
+          <a href="#promos">Promos</a>
+          <a href="#envios">Envíos</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+        <a class="btn btn--small btn--solid" href="#productos">Comprar</a>
+      </div>
     </div>
   </header>
 
@@ -182,7 +193,7 @@
             </div>
           </li>
 
-          <li class="product reveal">
+          <li class="product product--bf reveal" data-product-card="balde">
             <img
               class="product__img"
               src="assets/placeholders/producto-balde.svg"
@@ -192,9 +203,13 @@
               loading="lazy"
             >
             <div class="product__body">
+              <p class="bf-badge" data-bf-card-badge>Black Friday</p>
               <h3 class="product__name">Balde 10 kg</h3>
-              <p class="product__price"><span class="product__currency">$</span>65.000 <span class="product__ars">ARS</span></p>
-              <p class="product__note">$6.500/kg · precio por volumen.</p>
+              <p class="product__price">
+                <del class="price-old" data-bf-old>$65.000</del>
+                <span class="price-now"><span class="product__currency">$</span>59.000 <span class="product__ars">ARS</span></span>
+              </p>
+              <p class="product__note">$5.900/kg · precio por volumen · ahorrás $6.000 hasta el 27/11.</p>
               <a class="btn btn--solid btn--block" href="#compra" data-buy="balde">Comprar balde</a>
             </div>
           </li>
@@ -252,32 +267,46 @@
     <section id="promos" class="section promos" aria-labelledby="promos-titulo">
       <div class="section__inner">
         <header class="section__header reveal">
-          <p class="eyebrow">Promociones</p>
+          <p class="eyebrow">Promociones · Black Friday</p>
           <h2 id="promos-titulo">Combos para llevar más</h2>
-          <p class="section__lede">Mejor precio por kilo. Podés combinarlas en el carrito; el envío se cotiza una sola vez por CP.</p>
+          <p class="section__lede">Precios especiales hasta el 27/11 en combos y balde. Podés combinarlos en el carrito; el envío se cotiza una sola vez por CP.</p>
         </header>
 
         <ul class="promo-list">
-          <li class="promo reveal">
+          <li class="promo promo--bf reveal" data-product-card="combo-familiar">
+            <p class="bf-badge" data-bf-card-badge>Black Friday</p>
             <h3 class="promo__name">Combo familiar</h3>
             <p class="promo__size">2 kilos</p>
-            <p class="promo__price"><span class="product__currency">$</span>18.000</p>
-            <p class="promo__note">Ahorrás $1.000 vs comprar dos kilos sueltos. $9.000/kg. Envío aparte.</p>
+            <p class="promo__price">
+              <del class="price-old" data-bf-old>$18.000</del>
+              <span class="price-now"><span class="product__currency">$</span>16.500</span>
+            </p>
+            <p class="promo__note">Ahorrás $2.500 vs dos kilos sueltos ($19.000). $8.250/kg. Envío aparte.</p>
             <a class="btn btn--solid btn--block" href="#compra" data-buy="combo-familiar">Comprar combo familiar</a>
           </li>
-          <li class="promo reveal">
+          <li class="promo promo--bf reveal" data-product-card="combo-5kg">
+            <p class="bf-badge" data-bf-card-badge>Black Friday</p>
             <h3 class="promo__name">Combo 5 kilos</h3>
             <p class="promo__size">5 kilos</p>
-            <p class="promo__price"><span class="product__currency">$</span>42.000</p>
-            <p class="promo__note">Ahorrás $5.500 vs cinco kilos sueltos ($47.500). $8.400/kg. Envío aparte.</p>
+            <p class="promo__price">
+              <del class="price-old" data-bf-old>$42.000</del>
+              <span class="price-now"><span class="product__currency">$</span>37.900</span>
+            </p>
+            <p class="promo__note">Ahorrás $9.600 vs cinco kilos sueltos ($47.500). $7.580/kg. Envío aparte.</p>
             <a class="btn btn--solid btn--block" href="#compra" data-buy="combo-5kg">Comprar 5 kilos</a>
           </li>
-          <li class="promo promo--featured reveal">
-            <p class="promo__badge">Destacado</p>
+          <li class="promo promo--featured promo--bf reveal" data-product-card="pack-3kg-envio">
+            <div class="promo__badges">
+              <span class="bf-badge" data-bf-card-badge>Black Friday</span>
+              <span class="promo__badge">Destacado</span>
+            </div>
             <h3 class="promo__name">Pack 3 kilos con envío gratis</h3>
             <p class="promo__size">3 kilos</p>
-            <p class="promo__price"><span class="product__currency">$</span>31.900</p>
-            <p class="promo__note">Hasta $6.500 de envío bonificado. Sujeto a cobertura geográfica.</p>
+            <p class="promo__price">
+              <del class="price-old" data-bf-old>$31.900</del>
+              <span class="price-now"><span class="product__currency">$</span>28.900</span>
+            </p>
+            <p class="promo__note">Ahorrás $3.000 en Black Friday · hasta $6.500 de envío bonificado. Sujeto a cobertura geográfica.</p>
             <a class="btn btn--solid btn--block" href="#compra" data-buy="pack-3kg-envio">Comprar pack con envío</a>
           </li>
         </ul>
@@ -316,10 +345,10 @@
               <select data-cart-add-product>
                 <option value="medio-kilo">½ kilo — $5.000</option>
                 <option value="kilo" selected>1 kilo — $9.500</option>
-                <option value="balde">Balde 10 kg — $65.000</option>
-                <option value="combo-familiar">Combo familiar 2 kg — $18.000</option>
-                <option value="combo-5kg">Combo 5 kg — $42.000</option>
-                <option value="pack-3kg-envio">Pack 3 kg envío gratis — $31.900</option>
+                <option value="balde">Balde 10 kg — $59.000 (antes $65.000 · Black Friday)</option>
+                <option value="combo-familiar">Combo familiar 2 kg — $16.500 (antes $18.000 · Black Friday)</option>
+                <option value="combo-5kg">Combo 5 kg — $37.900 (antes $42.000 · Black Friday)</option>
+                <option value="pack-3kg-envio">Pack 3 kg envío gratis — $28.900 (antes $31.900 · Black Friday)</option>
               </select>
             </label>
             <button type="button" class="btn btn--solid" data-cart-add>Agregar</button>
@@ -328,6 +357,7 @@
           <p class="cart__subtotal" data-cart-subtotal hidden>
             Subtotal productos: <strong data-cart-subtotal-value></strong>
             <span class="cart__weight"> · <span data-cart-weight></span> kg</span>
+            <span class="cart__savings" data-cart-savings hidden></span>
           </p>
         </div>
 
@@ -361,6 +391,10 @@
             <div class="quote__row">
               <dt>Subtotal productos</dt>
               <dd data-q-products></dd>
+            </div>
+            <div class="quote__row quote__row--savings" data-q-savings-row hidden>
+              <dt>Ahorro Black Friday</dt>
+              <dd data-q-savings></dd>
             </div>
             <div class="quote__row">
               <dt>Destino</dt>
@@ -551,8 +585,8 @@
     </div>
   </footer>
 
-  <script src="js/shipping-config.js" defer></script>
-  <script src="js/main.js" defer></script>
+  <script src="js/shipping-config.js?v=20261124-bf" defer></script>
+  <script src="js/main.js?v=20261124-bf" defer></script>
   <!-- Clear panal progress BEFORE module boot (kills legacy localStorage even if an old bundle loads) -->
   <script>
     (function () {

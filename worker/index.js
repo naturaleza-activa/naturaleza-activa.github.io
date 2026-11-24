@@ -12,7 +12,23 @@
  * Archivo 100% standalone (sin imports): se puede pegar entero en Cloudflare → Edit code.
  */
 
-const PRODUCTS = {
+/**
+ * Campaña Black Friday (mantener sincronizado con js/shipping-config.js).
+ * - Para extender al 29/11: cambiar `untilDate` a "2026-11-29".
+ * - Para volver a precios regulares: cambiar `active` a `false`.
+ */
+const BLACK_FRIDAY = {
+  active: true,
+  untilDate: "2026-11-27",
+  prices: {
+    balde: 59000,
+    "combo-familiar": 16500,
+    "combo-5kg": 37900,
+    "pack-3kg-envio": 28900,
+  },
+};
+
+const REGULAR_PRODUCTS = {
   "medio-kilo": {
     id: "medio-kilo",
     title: "Miel Naturaleza Activa — ½ kilo",
@@ -51,6 +67,18 @@ const PRODUCTS = {
     freeShippingUpTo: 6500,
   },
 };
+
+const PRODUCTS = Object.fromEntries(
+  Object.entries(REGULAR_PRODUCTS).map(([id, product]) => {
+    const promoPrice = BLACK_FRIDAY.active ? BLACK_FRIDAY.prices[id] : null;
+    return [
+      id,
+      typeof promoPrice === "number"
+        ? { ...product, regularPrice: product.price, price: promoPrice }
+        : { ...product },
+    ];
+  })
+);
 
 const FREE_SHIP_PACK_ID = "pack-3kg-envio";
 
@@ -964,7 +992,10 @@ export default {
           mpToken: hasMpAccessToken(env),
           resend: Boolean(env.RESEND_API_KEY),
           multiItemCart: true,
-          version: "2026-11-24",
+          promo: BLACK_FRIDAY.active
+            ? { name: "black-friday", untilDate: BLACK_FRIDAY.untilDate }
+            : null,
+          version: "2026-11-24-bf",
           workersDevHint: new URL(request.url).host,
         },
         200,
